@@ -16,6 +16,8 @@ def doParsing():
     parser.add_argument("--datasetValDir", required=True, type=str, help="Dataset validation directory")
     parser.add_argument("--modelOutputPath", required=False, type=str, default="./export/mobilenet_fn.h5",
                         help="Filepath where to save the model")
+    parser.add_argument("--inputSize", required=False, type=int, default=224, help="Square size of model input")
+    parser.add_argument("--mobilenetAlpha", required=False, type=float, default=1.0, help="MobileNet alpha value")
     parser.add_argument("--batchSize", required=False, type=int, default=16, help="Batch size")
     parser.add_argument("--epochs", required=False, type=int, default=50, help="Number of training epochs")
     args = parser.parse_args()
@@ -31,7 +33,8 @@ def main():
     print(args)
 
     # Load MobileNet Full, with output shape of (None, 7, 7, 1024)
-    baseModel = MobileNet(input_shape=(224, 224, 3), alpha=1.0, depth_multiplier=1, dropout=1e-3, include_top=False,
+    baseModel = MobileNet(input_shape=(args.inputSize, args.inputSize, 3), alpha=args.mobilenetAlpha,
+                          depth_multiplier=1, dropout=1e-3, include_top=False,
                           weights='imagenet', input_tensor=None, pooling=None)
 
     fineTunedModel = Sequential()
@@ -70,7 +73,7 @@ def main():
     trainGenerator = trainImageGenerator.flow_from_directory(
         args.datasetTrainDir,
         # height, width
-        target_size=(224, 224),
+        target_size=(args.inputSize, args.inputSize),
         batch_size=args.batchSize,
         class_mode='categorical',
         shuffle=True)
@@ -78,7 +81,7 @@ def main():
     valGenerator = valImageGenerator.flow_from_directory(
         args.datasetValDir,
         # height, width
-        target_size=(224, 224),
+        target_size=(args.inputSize, args.inputSize),
         batch_size=args.batchSize,
         class_mode='categorical',
         shuffle=False)
