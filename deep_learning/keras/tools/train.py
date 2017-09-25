@@ -19,7 +19,7 @@ def doParsing():
     parser.add_argument("--inputSize", required=False, type=int, default=224, help="Square size of model input")
     parser.add_argument("--mobilenetAlpha", required=False, type=float, default=1.0, help="MobileNet alpha value")
     parser.add_argument("--batchSize", required=False, type=int, default=16, help="Batch size")
-    parser.add_argument("--epochs", required=False, type=int, default=50, help="Number of training epochs")
+    parser.add_argument("--epochs", required=False, type=int, default=10, help="Number of training epochs")
     args = parser.parse_args()
     return args
 
@@ -31,40 +31,6 @@ def main():
 
     args = doParsing()
     print(args)
-
-    # Load MobileNet Full, with output shape of (None, 7, 7, 1024)
-    baseModel = MobileNet(input_shape=(args.inputSize, args.inputSize, 3), alpha=args.mobilenetAlpha,
-                          depth_multiplier=1, dropout=1e-3, include_top=False,
-                          weights='imagenet', input_tensor=None, pooling=None)
-
-    fineTunedModel = Sequential()
-
-    fineTunedModel.add(baseModel)
-
-    # Global average output shape (None, 1, 1, 1024).
-    # Global pooling with AveragePooling2D to have a 4D Tensor and apply Conv2D.
-    fineTunedModel.add(AveragePooling2D(pool_size=(baseModel.output_shape[1], baseModel.output_shape[2]),
-                                        strides=(1, 1), padding='valid', name="global_pooling"))
-
-    fineTunedModel.add(Dropout(rate=0.5))
-
-    # Convolution layer that acts like fully connected, with 2 classes, output shape (None, 1, 1, 2)
-    fineTunedModel.add(Conv2D(filters=2, kernel_size=(1, 1), name="fc_conv"))
-
-    # Reshape to (None, 2) to match the one hot encoding target and final softmax
-    fineTunedModel.add(Flatten())
-
-    # Final sofmax for deploy stage
-    fineTunedModel.add(Activation('softmax'))
-
-    # Freeze the base model layers, train only the last convolution
-    for layer in fineTunedModel.layers[0].layers:
-        layer.trainable = False
-
-    # Train as categorical crossentropy (works also for numclasses > 2)
-    fineTunedModel.compile(loss='categorical_crossentropy',
-                           optimizer=optimizers.SGD(lr=1e-3, momentum=0.9),
-                           metrics=['categorical_accuracy'])
 
     # Image Generator, MobileNet needs [-1.0, 1.0] range (Inception like preprocessing)
     trainImageGenerator = ImageDataGenerator(preprocessing_function=preprocess_input, horizontal_flip=True)
@@ -85,6 +51,40 @@ def main():
         batch_size=args.batchSize,
         class_mode='categorical',
         shuffle=False)
+
+    # Load MobileNet Full, with output shape of (None, 7, 7, 1024)
+    baseModel = MobileNet(input_shape=(args.inputSize, args.inputSize, 3), alpha=args.mobilenetAlpha,
+                          depth_multiplier=1, dropout=1e-3, include_top=False,
+                          weights='imagenet', input_tensor=None, pooling=None)
+
+    fineTunedModel = Sequential()
+
+    fineTunedModel.add(baseModel)
+
+    # Global average output shape (None, 1, 1, 1024).
+    # Global pooling with AveragePooling2D to have a 4D Tensor and apply Conv2D.
+    fineTunedModel.add(AveragePooling2D(pool_size=(baseModel.output_shape[1], baseModel.output_shape[2]),
+                                        strides=(1, 1), padding='valid', name="global_pooling"))
+
+    fineTunedModel.add(Dropout(rate=0.5))
+
+    # Convolution layer that acts like fully connected, with 2 classes, output shape (None, 1, 1, 2)
+    fineTunedModel.add(Conv2D(filters=trainGenerator.num_class, kernel_size=(1, 1), name="fc_conv"))
+
+    # Reshape to (None, 2) to match the one hot encoding target and final softmax
+    fineTunedModel.add(Flatten())
+
+    # Final sofmax for deploy stage
+    fineTunedModel.add(Activation('softmax'))
+
+    # Freeze the base model layers, train only the last convolution
+    for layer in fineTunedModel.layers[0].layers:
+        layer.trainable = False
+
+    # Train as categorical crossentropy (works also for numclasses > 2)
+    fineTunedModel.compile(loss='categorical_crossentropy',
+                           optimizer=optimizers.SGD(lr=1e-3, momentum=0.9),
+                           metrics=['categorical_accuracy'])
 
     # fine-tune the model
     fineTunedModel.fit_generator(
