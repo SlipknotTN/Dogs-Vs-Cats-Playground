@@ -7,9 +7,9 @@ from scipy.misc import imread, imresize
 
 from keras.models import load_model
 from keras.applications import mobilenet
-from keras.preprocessing.image import ImageDataGenerator
 
 classes = ['cat', 'dog']
+
 
 def doParsing():
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -22,7 +22,9 @@ def doParsing():
 
 
 def main():
-
+    """
+    Example of predict_generator usage for images without labels, images are read one by one and you can export results
+    """
     args = doParsing()
     print(args)
 
@@ -35,21 +37,6 @@ def main():
     print(model.summary())
 
     # Dogs and cats test dataset has 12500 samples
-
-    # TODO: Create a custom generator, this one works only with labeled data, keep this as addition test with single image
-
-    # testImageGenerator = ImageDataGenerator(preprocessing_function=mobilenet.preprocess_input)
-
-    # TODO: Check last batch extraction if not divisible by batch_size
-
-    # testGenerator = testImageGenerator.flow_from_directory(
-    #     args.datasetTestDir,
-    #     # height, width
-    #     target_size=(224, 224),
-    #     batch_size=50,
-    #     shuffle=False)
-    #
-    # results = model.predict_generator(generator=testGenerator, steps=testGenerator.samples//testGenerator.batch_size)
 
     for file in sorted(glob.glob(args.datasetTestDir + "/*.jpg")):
 
