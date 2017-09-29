@@ -1,11 +1,14 @@
+import _init_paths
 import argparse
 
+from tfutils.export import exportModelToTF
 from keras.models import Sequential
 from keras.layers import Conv2D, Flatten, Dropout, Activation
 from keras.layers.pooling import AveragePooling2D
 from keras.applications.mobilenet import MobileNet, preprocess_input
 from keras import optimizers
 from keras.preprocessing.image import ImageDataGenerator
+
 
 # TODO: Create a config files for hyperparameters
 
@@ -15,7 +18,9 @@ def doParsing():
     parser.add_argument("--datasetTrainDir", required=True, type=str, help="Dataset train directory")
     parser.add_argument("--datasetValDir", required=True, type=str, help="Dataset validation directory")
     parser.add_argument("--modelOutputPath", required=False, type=str, default="./export/mobilenet_fn.h5",
-                        help="Filepath where to save the model")
+                        help="Filepath where to save the keras model")
+    parser.add_argument("--tfModelOutputDir", required=False, type=str, default=None,
+                        help="Optional directory where to export model in TF format (checkpoint + graph)")
     parser.add_argument("--inputSize", required=False, type=int, default=224, help="Square size of model input")
     parser.add_argument("--mobilenetAlpha", required=False, type=float, default=1.0, help="MobileNet alpha value")
     parser.add_argument("--batchSize", required=False, type=int, default=16, help="Batch size")
@@ -75,7 +80,7 @@ def main():
     fineTunedModel.add(Flatten())
 
     # Final sofmax for deploy stage
-    fineTunedModel.add(Activation('softmax'))
+    fineTunedModel.add(Activation('softmax', name="softmax"))
 
     # Freeze the base model layers, train only the last convolution
     for layer in fineTunedModel.layers[0].layers:
@@ -100,6 +105,10 @@ def main():
     fineTunedModel.save(args.modelOutputPath)
 
     print("Model saved to " + args.modelOutputPath)
+
+    # Export model to TF format
+    if args.tfModelOutputDir is not None:
+        exportModelToTF(args.tfModelOutputDir)
 
 
 if __name__ == '__main__':
