@@ -7,6 +7,7 @@ from keras.layers import Conv2D, Flatten, Dropout, Activation
 from keras.layers.pooling import AveragePooling2D
 from keras.applications.mobilenet import MobileNet, preprocess_input
 from keras import optimizers
+from keras.callbacks import ModelCheckpoint, EarlyStopping
 from keras.preprocessing.image import ImageDataGenerator
 
 
@@ -57,11 +58,12 @@ def main():
         class_mode='categorical',
         shuffle=False)
 
-    # Load MobileNet Full, with output shape of (None, 7, 7, 1024)
+    # Load MobileNet Full, with output shape of (None, 7, 7, 1024), final classifier is excluded
     baseModel = MobileNet(input_shape=(args.inputSize, args.inputSize, 3), alpha=args.mobilenetAlpha,
                           depth_multiplier=1, dropout=1e-3, include_top=False,
                           weights='imagenet', input_tensor=None, pooling=None)
 
+    # Final classifier definition
     fineTunedModel = Sequential()
 
     fineTunedModel.add(baseModel)
@@ -86,10 +88,15 @@ def main():
     for layer in fineTunedModel.layers[0].layers:
         layer.trainable = False
 
-    # Train as categorical crossentropy (works also for numclasses > 2)
+    # Train as categorical crossentropy (works also with numclasses > 2)
     fineTunedModel.compile(loss='categorical_crossentropy',
                            optimizer=optimizers.SGD(lr=1e-3, momentum=0.9),
                            metrics=['categorical_accuracy'])
+
+    # Callbacks for early stopping and best model save
+    earlyStoppingCB = EarlyStopping(monitor='val_categorical_accuracy', min_delta=0, patience=2, verbose=1, mode='auto')
+    modelChkptCB = ModelCheckpoint(args.modelOutputPath, monitor='val_categorical_accuracy', verbose=1, save_best_only=True,
+                                   save_weights_only=False, mode='auto', period=1)
 
     # fine-tune the model
     fineTunedModel.fit_generator(
@@ -97,12 +104,10 @@ def main():
         steps_per_epoch=trainGenerator.samples//trainGenerator.batch_size,
         epochs=args.epochs,
         validation_data=valGenerator,
-        validation_steps=valGenerator.samples//valGenerator.batch_size)
+        validation_steps=valGenerator.samples//valGenerator.batch_size,
+        callbacks=[earlyStoppingCB, modelChkptCB])
 
     print("Training finished")
-
-    # Save model and state
-    fineTunedModel.save(args.modelOutputPath)
 
     print("Model saved to " + args.modelOutputPath)
 
