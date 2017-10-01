@@ -1,6 +1,7 @@
 import _init_paths
 import argparse
 
+from config.ConfigParams import ConfigParams
 from tfutils.export import exportModelToTF
 from keras.models import Sequential
 from keras.layers import Conv2D, Flatten, Dropout, Activation
@@ -11,21 +12,16 @@ from keras.callbacks import ModelCheckpoint, EarlyStopping
 from keras.preprocessing.image import ImageDataGenerator
 
 
-# TODO: Create a config files for hyperparameters
-
 def doParsing():
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter,
                                      description="Keras training script")
     parser.add_argument("--datasetTrainDir", required=True, type=str, help="Dataset train directory")
     parser.add_argument("--datasetValDir", required=True, type=str, help="Dataset validation directory")
+    parser.add_argument("--configFile", required=True, type=str, help="Config file path")
     parser.add_argument("--modelOutputPath", required=False, type=str, default="./export/mobilenet_fn.h5",
                         help="Filepath where to save the keras model")
     parser.add_argument("--tfModelOutputDir", required=False, type=str, default=None,
                         help="Optional directory where to export model in TF format (checkpoint + graph)")
-    parser.add_argument("--inputSize", required=False, type=int, default=224, help="Square size of model input")
-    parser.add_argument("--mobilenetAlpha", required=False, type=float, default=1.0, help="MobileNet alpha value")
-    parser.add_argument("--batchSize", required=False, type=int, default=16, help="Batch size")
-    parser.add_argument("--epochs", required=False, type=int, default=10, help="Number of training epochs")
     args = parser.parse_args()
     return args
 
@@ -38,6 +34,8 @@ def main():
     args = doParsing()
     print(args)
 
+    config = ConfigParams(args.configFile)
+
     # Image Generator, MobileNet needs [-1.0, 1.0] range (Inception like preprocessing)
     trainImageGenerator = ImageDataGenerator(preprocessing_function=preprocess_input, horizontal_flip=True)
     valImageGenerator = ImageDataGenerator(preprocessing_function=preprocess_input)
@@ -45,21 +43,21 @@ def main():
     trainGenerator = trainImageGenerator.flow_from_directory(
         args.datasetTrainDir,
         # height, width
-        target_size=(args.inputSize, args.inputSize),
-        batch_size=args.batchSize,
+        target_size=(config.inputSize, config.inputSize),
+        batch_size=config.batchSize,
         class_mode='categorical',
         shuffle=True)
 
     valGenerator = valImageGenerator.flow_from_directory(
         args.datasetValDir,
         # height, width
-        target_size=(args.inputSize, args.inputSize),
-        batch_size=args.batchSize,
+        target_size=(config.inputSize, config.inputSize),
+        batch_size=config.batchSize,
         class_mode='categorical',
         shuffle=False)
 
     # Load MobileNet Full, with output shape of (None, 7, 7, 1024), final classifier is excluded
-    baseModel = MobileNet(input_shape=(args.inputSize, args.inputSize, 3), alpha=args.mobilenetAlpha,
+    baseModel = MobileNet(input_shape=(config.inputSize, config.inputSize, 3), alpha=config.mobilenetAlpha,
                           depth_multiplier=1, dropout=1e-3, include_top=False,
                           weights='imagenet', input_tensor=None, pooling=None)
 
@@ -90,11 +88,11 @@ def main():
 
     # Train as categorical crossentropy (works also with numclasses > 2)
     fineTunedModel.compile(loss='categorical_crossentropy',
-                           optimizer=optimizers.SGD(lr=1e-3, momentum=0.9),
+                           optimizer=optimizers.SGD(lr=config.learningRate, momentum=config.momentum),
                            metrics=['categorical_accuracy'])
 
     # Callbacks for early stopping and best model save
-    earlyStoppingCB = EarlyStopping(monitor='val_categorical_accuracy', min_delta=0, patience=2, verbose=1, mode='auto')
+    earlyStoppingCB = EarlyStopping(monitor='val_categorical_accuracy', min_delta=0, patience=config.patience, verbose=1, mode='auto')
     modelChkptCB = ModelCheckpoint(args.modelOutputPath, monitor='val_categorical_accuracy', verbose=1, save_best_only=True,
                                    save_weights_only=False, mode='auto', period=1)
 
@@ -102,7 +100,7 @@ def main():
     fineTunedModel.fit_generator(
         trainGenerator,
         steps_per_epoch=trainGenerator.samples//trainGenerator.batch_size,
-        epochs=args.epochs,
+        epochs=config.epochs,
         validation_data=valGenerator,
         validation_steps=valGenerator.samples//valGenerator.batch_size,
         callbacks=[earlyStoppingCB, modelChkptCB])
