@@ -47,7 +47,7 @@ def main():
                                       steps=testGenerator.samples // testGenerator.batch_size +
                                             testGenerator.samples % testGenerator.batch_size)
 
-    # If need it read results here, but please notice that you no references to filenames
+    # Read results here if you need it, but please notice that you have no references to filenames
 
     print("Test finished")
 

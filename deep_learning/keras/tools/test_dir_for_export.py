@@ -18,7 +18,7 @@ def doParsing():
                                      description="Keras test script")
     parser.add_argument("--datasetTestDir", required=True, type=str, help="Dataset test directory")
     parser.add_argument("--modelPath", required=False, type=str, default="./export/mobilenet_fn.h5",
-                        help="Filepath where to save the model")
+                        help="Filepath with trained model")
     parser.add_argument("--kaggleExportFile", required=False, type=str, default=None,
                         help="CSV file in kaggle format for challenge upload")
     args = parser.parse_args()
@@ -32,6 +32,7 @@ def main():
     args = doParsing()
     print(args)
 
+    # Load model with custom object for mobilenet
     model = load_model(args.modelPath, custom_objects={
                        'relu6': mobilenet.relu6,
                        'DepthwiseConv2D': mobilenet.DepthwiseConv2D})
