@@ -9,12 +9,12 @@ class ModelsFactory(object):
         inputShape = (config.inputSize, config.inputSize, config.inputChannels)
 
         if config.architecture == "mobilenet":
-
+            # Fine tuning
             return Model.mobilenet(inputShape=inputShape, numClasses=numClasses, alpha=config.mobilenetAlpha,
                                    retrainAll=False)
 
         elif config.architecture == "custom":
-
+            # Train from scratch
             return Model.custom(inputShape=inputShape, numClasses=numClasses)
 
         else:
