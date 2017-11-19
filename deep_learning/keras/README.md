@@ -2,13 +2,19 @@
 
 Example usage of keras to classify dogs and cats images (from Kaggle challenge [Dogs Vs Cats Redux](https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition)).
 
-### Model
+## Models
+
+### MobileNet
 
 Mobilenet pretrained on ImageNet, trained from scratch only the last convolution layer to classify the target classes. [[Paper]](https://arxiv.org/abs/1704.04861) [[Official TF slim models]](https://github.com/tensorflow/models/blob/master/research/slim/nets/mobilenet_v1.md)
 
 **Image format:** RGB.
 
 **Image preprocessing:** transform from [0, 255] uint8 range to [-1.0, 1.0] float (Inception preprocessing).
+
+### Custom model
+
+Example usage of Sequential API to define a new architectur and train it from scratch.
 
 ### Kaggle Results
 
