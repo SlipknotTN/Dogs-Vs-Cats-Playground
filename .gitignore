@@ -1,1 +1,3 @@
 *.pyc
+# Dataset dir
+kaggle_dataset
