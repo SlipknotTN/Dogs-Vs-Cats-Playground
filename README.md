@@ -23,9 +23,9 @@ TODO: How to download and prepare the dataset, each method can needs different p
 
 Each subproject is standalone and you can refer to subsequent links:
 
-- [] XGBoost: [tutorial](http://blog.kaggle.com/2017/01/23/a-kaggle-master-explains-gradient-boosting/)
-- [] Deep Forest: [example](https://www.kaggle.com/demoon/the-nature-conservancy-fisheries-monitoring/deep-forest-1-4-public-log-loss-with-1-5-data)
+- [ ] XGBoost: [tutorial](http://blog.kaggle.com/2017/01/23/a-kaggle-master-explains-gradient-boosting/)
+- [ ] Deep Forest: [example](https://www.kaggle.com/demoon/the-nature-conservancy-fisheries-monitoring/deep-forest-1-4-public-log-loss-with-1-5-data)
 - Deep Learning
     - [x] [Keras](/deep_learning/keras): pretrained MobileNet, custom model defined with Sequential API
-    - [] [Tensorflow](/deep_learning/tensorflow): pretrained MobileNet, pretrained SqueezeNet, pretrained NasNet, custom model
-    - [] PyTorch
+    - [ ] [Tensorflow](/deep_learning/tensorflow): pretrained MobileNet, pretrained SqueezeNet, pretrained NasNet, custom model
+    - [ ] PyTorch
