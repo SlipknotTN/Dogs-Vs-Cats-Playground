@@ -1,8 +1,12 @@
 class Constants(object):
 
-    class Training:
+    class ConfigSection:
 
-        trainingSection = "TRAINING"
-        epochsKey = "epochs"
-        learningRate = "learningRate"
-        optimizer = "optimizer"
+        hyperparameters = "HYPERPARAMETERS"
+        model = "MODEL"
+        datasetParameters = "DATASET_PARAMETERS"
+
+    class DatasetParams:
+
+        validationPercentage = "validationPercentage"
+        imageEncoding = "imageEncoding"
