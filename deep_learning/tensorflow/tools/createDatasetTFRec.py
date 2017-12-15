@@ -1,10 +1,10 @@
+import _init_paths
 import argparse
 import json
 import os
 import tensorflow as tf
 
-from config.dataset.DatasetParams import DatasetParams
-from trainUtils.ArgsValidator import ArgsValidator
+from config.ConfigParams import ConfigParams
 from data.DatasetWriterFactory import DatasetWriterFactory
 
 
@@ -12,15 +12,10 @@ def do_parsing():
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
         description='Script for classification fine tuning')
-    parser.add_argument('--imagesDir', required=True, help='Folder containing images.')
-    parser.add_argument('--datasetConfigFile', required=True, type=str, help='Config file for dataset creation')
+    parser.add_argument('--imagesDir', required=True,
+                        help='Root folder containing images (single directory that has to be split')
+    parser.add_argument('--configFile', required=True, type=str, help='Config file for dataset creation')
     parser.add_argument('--outputDir', required=True, help='TFRecords destination directory, use a clean directory')
-    parser.add_argument('--debugRead', action='store_true',
-                        help="Enable imshow debug for images read from stored records")
-    parser.add_argument('--proposalsDir', required=False,
-                        help='Folder containing objectness proposals, needed for detection')
-    parser.add_argument('--groundThruthBoxesDir', required=False, help='Folder containing detection ground thruth, '
-                                                                       'needed for detection')
     parser.add_argument('--trainFile', required=False, default=None,
                         help='File containing training examples filenames (without extensions)')
     parser.add_argument('--valFile', required=False, default=None,
@@ -34,7 +29,7 @@ def main():
     print(args)
 
     # Read dataset configuration
-    datasetParams = DatasetParams().initFromConfigFile(args.datasetConfigFile).setImagesDir(args.imagesDir)
+    datasetParams = ConfigParams(args.configFile)
 
     # Get dataset writer with training and validation splits
     dataset = DatasetWriterFactory.createDatasetWriter(datasetParams=datasetParams, scriptArgs=args)
@@ -58,17 +53,19 @@ def main():
         dataset.saveTFExamplesValidation(datasetParams=datasetParams, writer=tfrecWriter)
         print("Saving file...")
 
-    # Export metadata to JSON, we need to set the additional parameters retrieved from actual images directory
+    # Export metadata to JSON
     trainingSamplesNumber = dataset.getTrainingSamplesNumber()
     validationSamplesNumber = dataset.getValidationSamplesNumber()
-    datasetParams = datasetParams.setNumClasses(dataset.numClasses) \
-                        .setTraining(trainingSamplesNumber, os.path.basename(trainingOutputFile)) \
-                        .setValidation(validationSamplesNumber, os.path.basename(validationOutputFile))
+    datasetMetadata = dict()
+    datasetMetadata["trainSamples"] = trainingSamplesNumber
+    datasetMetadata["validationSamples"] = validationSamplesNumber
+    datasetMetadata["numClasses"] = dataset.numClasses
 
     with open(jsonFilePath, 'w') as jsonOutFile:
-        json.dump(datasetParams, jsonOutFile, default=lambda o: o.__dict__, indent=4)
+        json.dump(datasetMetadata, jsonOutFile, default=lambda o: o.__dict__, indent=4)
 
-    print ("Dataset successfully created in " + args.outputDir)
+    print("Dataset successfully created in " + args.outputDir)
+
 
 if __name__ == '__main__':
     main()

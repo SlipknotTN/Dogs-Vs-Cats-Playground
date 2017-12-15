@@ -1,13 +1,11 @@
-import cv2
 import numpy as np
 import tensorflow as tf
 
-import os
-
 from tqdm import tqdm
 
-from data.DatasetWriter import DatasetWriter
-from trainUtils.TrainConstants import TrainConstants as constants
+from .DatasetWriter import DatasetWriter
+from constants.Constants import Constants as constants
+from image.ImageUtils import ImageUtils
 
 
 class DatasetTFWriter(DatasetWriter):
@@ -57,8 +55,9 @@ class DatasetTFWriter(DatasetWriter):
 
             # Load image in HWC-RGB uint8 format
             originalImage = ImageUtils.loadImage(filename)
+            # Width = Height
             imageRaw = ImageUtils.loadAndResizeSquash(originalImage,
-                                                      size=(datasetParams.imageWidth, datasetParams.imageHeight))
+                                                      size=(datasetParams.inputSize, datasetParams.inputSize))
 
             # Encoding of sample image
             image = None

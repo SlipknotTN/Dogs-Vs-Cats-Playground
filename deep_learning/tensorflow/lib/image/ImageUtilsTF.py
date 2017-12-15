@@ -2,7 +2,7 @@ import tensorflow as tf
 import numpy as np
 
 from .ImageUtils import ImageUtils
-from trainUtils.TrainConstants import TrainConstants as constants
+from constants.Constants import Constants as constants
 
 
 class ImageUtilsTF(ImageUtils):
@@ -10,23 +10,19 @@ class ImageUtilsTF(ImageUtils):
     Image Utils for tensorflow pipeline, TF operations
     """
     @classmethod
-    def preprocessing(cls, image, width, height, imageParams):
+    def preprocessing(cls, image, width, height, preprocessingType, mean=None):
 
         with tf.device('/cpu:0'):
 
             # We use the passed width and height (not forced to use imageParams width and height)
             image = tf.image.resize_images(image, size=(width, height))
 
-            if imageParams.preprocessing_type == constants.PreprocessingType.vgg:
-                image = cls.preprocessVgg(image, imageParams.mean)
-            elif imageParams.preprocessing_type == constants.PreprocessingType.inception:
+            if preprocessingType == constants.PreprocessingType.vgg:
+                image = cls.preprocessVgg(image, mean)
+            elif preprocessingType == constants.PreprocessingType.inception:
                 image = cls.preprocessInception(image)
             else:
-                raise Exception("Preprocessing type " + imageParams.preprocessing_type + " not supported")
-
-            # Optional BGR conversion (image format is HWC)
-            if imageParams.input_expected_format == "bgr":
-                image = tf.reverse(image, axis=[-1])
+                raise Exception("Preprocessing type " + preprocessingType + " not supported")
 
             return image
 
@@ -35,13 +31,12 @@ class ImageUtilsTF(ImageUtils):
         """
         VGG Processing (equal to AlexNet, SqueezeNet, GoogleNet, ...)
         :param image float32 HWC-RGB Tensor in range [0.0, 255.0]
-        :param mean Mean values BGR (ndarray of 3 elements)
+        :param mean Mean values RGB (ndarray of 3 elements)
         :return: processed image in format float32 HWC-RGB Tensor in range [0.0, 255.0]
         minus mean (we can obtain negative values)
         """
         # Subtract mean
-        meanRGB = mean[::-1]
-        meanRGB = tf.reshape(meanRGB.astype(np.float32), shape=(1, 1, 3))
+        meanRGB = tf.reshape(mean.astype(np.float32), shape=(1, 1, 3))
         image = tf.subtract(image, meanRGB)
         return image
 
@@ -56,4 +51,3 @@ class ImageUtilsTF(ImageUtils):
         image = tf.subtract(image, 0.5)
         image = tf.multiply(image, 2.0)
         return image
-

@@ -27,6 +27,7 @@ class ConfigParams(object):
             raise Exception("Only SGD optimizer supported")
 
         #Dataset creation params (image size = model size for simplicity)
-        self.validationPercentage = config.getint(const.ConfigSection.datasetParams,
+        self.validationPercentage = config.getint(const.ConfigSection.datasetParameters,
                                                   const.DatasetParams.validationPercentage)
-        self.encoding = config.get(const.ConfigSection.datasetParams, const.DatasetParams.imageEncoding)
+        self.imageEncoding = config.get(const.ConfigSection.datasetParameters, const.DatasetParams.imageEncoding,
+                                        fallback=None)

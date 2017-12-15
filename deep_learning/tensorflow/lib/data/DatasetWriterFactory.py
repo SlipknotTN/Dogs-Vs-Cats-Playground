@@ -12,15 +12,3 @@ class DatasetWriterFactory(object):
                                        validationPercentage=datasetParams.validationPercentage)
 
         return dataset
-
-    @classmethod
-    def setDetectionSamples(cls, dataset, datasetParams, scriptArgs):
-
-        # Single directory, train validation split with percentage
-        if datasetParams.trainValFiles is False:
-            dataset.setTrainValSamplesListDetection(datasetParams=datasetParams, scriptArgs=scriptArgs)
-
-        # Single directory, train and validation separated files with samples list
-        else:
-            dataset.setVOCTrainSamplesListDetection(datasetParams=datasetParams, scriptArgs=scriptArgs)
-            dataset.setVOCValSamplesListDetection(datasetParams=datasetParams, scriptArgs=scriptArgs)
