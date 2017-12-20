@@ -1,3 +1,6 @@
+from .MobileNet import MobileNet
+
+
 class ModelFactory(object):
 
     @classmethod
@@ -5,12 +8,12 @@ class ModelFactory(object):
 
         # Choose model network and build trainable layers
         if config.model.lower() == "squeezenet":
-            return SqueezeNet(model=tfmodel, trainingParams=config,
-                                           dataProvider=dataProvider,
-                                           trainDevice=trainDevice)
+            raise Exception('Architecture ' + config.model + 'not supported')
+            # return SqueezeNet(model=tfmodel, trainingParams=config,
+            #                                dataProvider=dataProvider,
+            #                                trainDevice=trainDevice)
         elif config.model.lower() == "mobilenet":
             return MobileNet(model=tfmodel, trainingParams=config,
-                                          dataProvider=dataProvider,
-                                          trainDevice=trainDevice)
+                             dataProvider=dataProvider, trainDevice=trainDevice)
         else:
             raise Exception('Architecture ' + config.model + 'not supported')

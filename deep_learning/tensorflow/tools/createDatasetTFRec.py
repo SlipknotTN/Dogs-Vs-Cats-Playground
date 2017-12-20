@@ -28,7 +28,7 @@ def main():
     args = do_parsing()
     print(args)
 
-    # Read dataset configuration
+    # Read dataset configuration (config file is in common for dataset creation and training hyperparameters)
     datasetParams = ConfigParams(args.configFile)
 
     # Get dataset writer with training and validation splits

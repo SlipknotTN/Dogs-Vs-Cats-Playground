@@ -1,13 +1,13 @@
 import tensorflow as tf
 
-from architectures.ClassificationModel import ClassificationModel
+from .ClassificationModel import ClassificationModel
 
 
 class MobileNet(ClassificationModel):
 
     def __init__(self, model, trainingParams, dataProvider, trainDevice):
 
-        #ClassificationModel.__init__(self)
+        ClassificationModel.__init__(self)
 
         self.setPlaceholders(trainDevice=trainDevice, model=model, datasetParams=dataProvider.datasetParams)
 

@@ -67,7 +67,6 @@ class ImageUtils(object):
         :return: processed image in format float32 HWC-RGB Tensor in range [0.0, 255.0]
         minus mean (we can obtain negative values)
         """
-
         assert (len(image.shape) == 3), "VGG preprocessing supports only 3 channels images"
 
         # Subtract mean
@@ -83,8 +82,7 @@ class ImageUtils(object):
         :param image ndarray RGB-HWC float32 in range [0.0, 255.0]
         :return: float32 HWC-RGB Tensor in range [-1.0, 1.0]
         """
-
-        # Normalize force values to min and max, we avoid this with following operations
+        # Min max normalization forces values to min and max, we avoid this with following operations
         image *= 1.0/255.0
         image -= 0.5
         image *= 2.0

@@ -1,6 +1,7 @@
 import configparser
 from constants.Constants import Constants as const
 
+
 class ConfigParams(object):
 
     def __init__(self, file):
