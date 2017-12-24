@@ -27,7 +27,7 @@ def doParsing():
 
 def main():
     """
-    Example of predict_generator usage for images without labels, images are read one by one and you can export results
+    Script to export results for Kaggle, Images are read one by one
     """
     args = doParsing()
     print(args)
