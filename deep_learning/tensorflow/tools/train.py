@@ -3,8 +3,12 @@ import argparse
 import os
 
 from config.ConfigParams import ConfigParams
-from trainUtils.trainDevice import selectTrainDevice
+from data.DatasetMetadata import DatasetMetadata
+from data.DatasetTFReader import DatasetTFReader
 from model.TensorflowModel import TensorflowModel
+from model.ModelFactory import ModelFactory
+from trainProcess.trainDevice import selectTrainDevice
+from trainProcess.TrainProcess import TrainProcess
 
 
 def doParsing():
@@ -29,22 +33,31 @@ def main():
     print(args)
 
     # Read training configuration (config file is in common for dataset creation and training hyperparameters)
-    trainingParams = ConfigParams(args.configFile)
+    configParams = ConfigParams(args.configFile)
 
     # Select train device
     trainDevice = selectTrainDevice(args.useGpu)
 
-    # TODO: Load DataProvider
+    # Load DataProvider
+    dataProvider = DatasetTFReader(
+        datasetDir=args.datasetDir,
+        datasetMetadata=DatasetMetadata().initFromJson(os.path.join(args.datasetDir, "metadata.json")),
+        configParams=configParams)
 
     # Load base model graph
     baseTFModel = TensorflowModel(os.path.join(args.modelDir, "graph.pb"))
 
     # TODO: Append classifier for fine tuning training (use ModelFactory)
-
+    trainingModel = ModelFactory.create(config=configParams, tfmodel=baseTFModel,
+                                        dataProvider=dataProvider, trainDevice=trainDevice)
 
     # TODO: Run training loading images
+    trainProcess = TrainProcess(config=configParams, trainingModel=trainingModel,
+                                dataProvider=dataProvider, outputDir=args.checkpointOutputDir)
+    trainProcess.runTrain()
 
     # TODO: Save fine tuned model
+    return
 
 
 if __name__ == '__main__':

@@ -7,12 +7,12 @@ class ModelFactory(object):
     def create(cls, config, tfmodel, dataProvider, trainDevice):
 
         # Choose model network and build trainable layers
-        if config.model.lower() == "squeezenet":
+        if config.architecture.lower() == "squeezenet":
             raise Exception('Architecture ' + config.model + 'not supported')
             # return SqueezeNet(model=tfmodel, trainingParams=config,
             #                                dataProvider=dataProvider,
             #                                trainDevice=trainDevice)
-        elif config.model.lower() == "mobilenet":
+        elif config.architecture.lower() == "mobilenet":
             return MobileNet(model=tfmodel, trainingParams=config,
                              dataProvider=dataProvider, trainDevice=trainDevice)
         else:

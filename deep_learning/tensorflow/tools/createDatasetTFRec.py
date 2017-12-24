@@ -6,6 +6,7 @@ import tensorflow as tf
 
 from config.ConfigParams import ConfigParams
 from data.DatasetWriterFactory import DatasetWriterFactory
+from data.DatasetMetadata import DatasetMetadata
 
 
 def do_parsing():
@@ -56,10 +57,7 @@ def main():
     # Export metadata to JSON
     trainingSamplesNumber = dataset.getTrainingSamplesNumber()
     validationSamplesNumber = dataset.getValidationSamplesNumber()
-    datasetMetadata = dict()
-    datasetMetadata["trainSamples"] = trainingSamplesNumber
-    datasetMetadata["validationSamples"] = validationSamplesNumber
-    datasetMetadata["numClasses"] = dataset.numClasses
+    datasetMetadata = DatasetMetadata(trainingSamplesNumber, validationSamplesNumber, dataset.numClasses)
 
     with open(jsonFilePath, 'w') as jsonOutFile:
         json.dump(datasetMetadata, jsonOutFile, default=lambda o: o.__dict__, indent=4)

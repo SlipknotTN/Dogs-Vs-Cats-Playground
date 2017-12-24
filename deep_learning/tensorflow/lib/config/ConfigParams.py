@@ -11,6 +11,7 @@ class ConfigParams(object):
 
         # Model
         self.architecture = config.get(const.ConfigSection.model, "architecture")
+
         # Valid only for mobilenet
         if self.architecture == "mobilenet":
             self.mobilenetAlpha = config.getfloat(const.ConfigSection.model, "mobilenetAlpha", fallback=1.0)
@@ -26,6 +27,7 @@ class ConfigParams(object):
         self.optimizer = config.get(const.ConfigSection.hyperparameters, "optimizer")
         if self.optimizer != "SGD":
             raise Exception("Only SGD optimizer supported")
+        self.saveBestEpoch = config.getboolean(const.ConfigSection.hyperparameters, "saveBestEpoch")
 
         #Dataset creation params (image size = model size for simplicity)
         self.validationPercentage = config.getint(const.ConfigSection.datasetParameters,
