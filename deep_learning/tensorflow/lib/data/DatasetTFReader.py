@@ -85,7 +85,7 @@ class DatasetTFReader(DatasetReader):
 
         # Creates batches by randomly shuffling tensors
         images, labels = tf.train.shuffle_batch([image, label], batch_size=self.configParams.batchSize,
-                                                capacity=self.configParams.batchSize * 4, num_threads=12,
+                                                capacity=self.configParams.batchSize * 4, num_threads=8,
                                                 min_after_dequeue=self.configParams.batchSize)
 
         return images, labels

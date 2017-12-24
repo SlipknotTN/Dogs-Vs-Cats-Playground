@@ -24,7 +24,6 @@ class ConfigParams(object):
         # HyperParameters
         self.epochs = config.getint(const.ConfigSection.hyperparameters, "epochs")
         self.batchSize = config.getint(const.ConfigSection.hyperparameters, "batchSize")
-        self.patience = config.getint(const.ConfigSection.hyperparameters, "patience")
 
         # Load the optimizer params
         optimizerType = str(config.get(const.ConfigSection.hyperparameters, const.TrainConfig.optimizer)).upper()
