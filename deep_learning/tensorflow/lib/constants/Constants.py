@@ -30,3 +30,45 @@ class Constants(object):
 
         label = "label"
         image = "image"
+
+
+    class TrainConfig:
+
+        # Sections
+        hyperParameters = "HYPERPARAMETERS"
+        adadelta = "ADADELTA"
+        adagrad = "ADAGRAD"
+        sgd = "SGD"
+        adam = "ADAM"
+        ftlr = "FTLR"
+        momentumSection = "MOMENTUM"
+        rms = "RMSPROP"
+        lrPolicy = "LEARNING_RATE_POLICY"
+
+        # Keys
+        numEpochs = 'numEpochs'
+        batchSize = 'batchSize'
+        optimizer = 'optimizer'
+
+        starterLearningRate = 'starterLearningRate'
+        rho = 'rho'
+        epsilon = 'epsilon'
+        initialAccumulatorValue = 'initialAccumulatorValue'
+        beta1 = "beta1"
+        beta2 = "beta2"
+        learningRatePower = "learningRatePower"
+        l1RegularizationStrength = "l1RegularizationStrength"
+        l2RegularizationStrength = "l2RegularizationStrength"
+        momentum = "momentum"
+        decay = "decay"
+
+        decayPolicy = "decayPolicy"
+        lrDecayStep = "lrDecayStep"
+        lrDecayRate = "lrDecayRate"
+
+        type = "type"
+
+    class LRPolicy:
+
+        fixed = "fixed"
+        exponential = "exponential"

@@ -78,7 +78,7 @@ class DatasetTFReader(DatasetReader):
             modelInputHeight = self.configParams.inputSize
             modelInputWidth = self.configParams.inputSize
             image = ImageUtilsTF.preprocessing(image, width=modelInputWidth, height=modelInputHeight,
-                                               imageParams=self.configParams.preprocessType)
+                                               preprocessingType=self.configParams.preprocessType)
 
             # Random mirroring
             image = tf.image.random_flip_left_right(image, seed=0)

@@ -1,5 +1,7 @@
 import configparser
 from constants.Constants import Constants as const
+from .OptimizerParamsFactory import OptimizerParamsFactory
+from .LRPolicyParams import LRPolicyParams
 
 
 class ConfigParams(object):
@@ -23,10 +25,14 @@ class ConfigParams(object):
         self.epochs = config.getint(const.ConfigSection.hyperparameters, "epochs")
         self.batchSize = config.getint(const.ConfigSection.hyperparameters, "batchSize")
         self.patience = config.getint(const.ConfigSection.hyperparameters, "patience")
-        self.learningRate = config.getfloat(const.ConfigSection.hyperparameters, "learningRate")
-        self.optimizer = config.get(const.ConfigSection.hyperparameters, "optimizer")
-        if self.optimizer != "SGD":
-            raise Exception("Only SGD optimizer supported")
+
+        # Load the optimizer params
+        optimizerType = str(config.get(const.ConfigSection.hyperparameters, const.TrainConfig.optimizer)).upper()
+        self.optimizer = OptimizerParamsFactory.createOptimizerParams(optimizerType=optimizerType, config=config)
+
+        # Load learning rate policy
+        self.optimizer.setLrParams(LRPolicyParams(optimizerType=optimizerType, config=config))
+
         self.saveBestEpoch = config.getboolean(const.ConfigSection.hyperparameters, "saveBestEpoch")
 
         #Dataset creation params (image size = model size for simplicity)

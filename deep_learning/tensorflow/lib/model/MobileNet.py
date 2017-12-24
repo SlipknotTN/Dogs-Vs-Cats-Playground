@@ -5,23 +5,28 @@ from .ClassificationModel import ClassificationModel
 
 class MobileNet(ClassificationModel):
 
-    def __init__(self, model, trainingParams, dataProvider, trainDevice):
+    def __init__(self, configParams, model, dataProvider, trainDevice):
 
-        ClassificationModel.__init__(self)
+        ClassificationModel.__init__(self, configParams, model, dataProvider, trainDevice)
 
-        self.setPlaceholders(trainDevice=trainDevice, model=model, datasetParams=dataProvider.datasetParams)
+        ## Tensorflow Placeholders
+        with tf.device(trainDevice):
+            # Image placeholder, shape NHWC, you need to provide BGR images
+            self.x = model.getGraph().get_tensor_by_name("input:0")
+            # Ground truth placeholder (one-hot encoding)
+            self.y = tf.placeholder(dtype=tf.int32, shape=[None, self.dataProvider.datasetMetadata.numClasses], name="y")
 
         # Custom fine tuning definition, train only the last classifier
         with tf.device(trainDevice):
             # Loaded model is freezed in test mode
-            self.inputLayerTrainedFromScratch = model.getGraph().get_tensor_by_name(
+            inputLayerTrainedFromScratch = model.getGraph().get_tensor_by_name(
                 'MobilenetV1/Logits/Dropout_1b/Identity:0')
-            self.layersTrainedFromScratchNames = trainingParams.layersTrainedFromScratch
+            layersTrainedFromScratchNames = ["Conv2d_1c_1x1_fn"]
 
             # Tensorflow ops for layers representation
             self.lastConv = tf.layers.conv2d(
-                self.inputLayerTrainedFromScratch,
-                filters=dataProvider.datasetParams.numClasses,
+                inputLayerTrainedFromScratch,
+                filters=dataProvider.datasetMetadata.numClasses,
                 kernel_size=[1,1],
                 strides=(1, 1),
                 padding='same',
@@ -35,46 +40,12 @@ class MobileNet(ClassificationModel):
                 bias_regularizer=None,
                 activity_regularizer=None,
                 trainable=True,
-                name="Conv2d_1c_1x1_fn",
+                name=layersTrainedFromScratchNames[0],
                 reuse=None
             )
 
             # Reshape to 2D array (batch x numClasses), otherwise convolution output is 4D
-            self.logits = tf.reshape(self.lastConv, [-1, dataProvider.datasetParams.numClasses])
+            self.logits = tf.reshape(self.lastConv, [-1, self.dataProvider.datasetMetadata.numClasses])
 
-        self.setTrainableVariables(trainDevice=trainDevice, trainingParams=trainingParams)
-        self.defineTrainingOperations(dataProvider, model, trainDevice, trainingParams)
-
-    def defineTrainingOperations(self, dataProvider, model, trainDevice, trainingParams):
-
-        self.setDeployOutputs(trainDevice, trainingParams=trainingParams)
-
-        with tf.device('/cpu:0'):
-            self.globalStep = tf.Variable(0, trainable=False)
-
-        self.setCostFunction(trainDevice)
-
-        with tf.device(trainDevice):
-            self.learningRate = LearningRateFactory.createLearningRate(optimizerParams=trainingParams.optimizer,
-                                                                    trainBatches=dataProvider.getTrainBatchesNumber(),
-                                                                    globalStepVar=self.globalStep)
-
-        with tf.device('/cpu:0'):
-            self.lrateSummary = tf.summary.scalar("learning rate", self.learningRate)
-
-        with tf.device(trainDevice):
-            self.optimizer = TrainOptimizer.createOptimizer(learningRate=self.learningRate,
-                                                            optimizerParams=trainingParams.optimizer)
-            self.optimizer = self.optimizer.minimize(self.cost, global_step=self.globalStep, var_list=self.var_list)
-
-        with tf.device('/cpu:0'):
-            self.correctPred = tf.equal(tf.argmax(self.logits, 1), tf.argmax(self.y, 1))
-
-        with tf.device(trainDevice):
-            self.accuracy = tf.reduce_mean(tf.cast(self.correctPred, tf.float32), name='accuracy')
-            self.scalarInputForSummary = tf.placeholder(dtype=tf.float32, name="scalar_input_summary")
-
-        with tf.device('/cpu:0'):
-            self.costSummary = tf.summary.scalar("Training loss", self.scalarInputForSummary)
-            self.accuracySummary = tf.summary.scalar("validation accuracy", self.scalarInputForSummary)
-
+        self.setTrainableVariables(layersTrainedFromScratchNames)
+        self.defineTrainingOperations()

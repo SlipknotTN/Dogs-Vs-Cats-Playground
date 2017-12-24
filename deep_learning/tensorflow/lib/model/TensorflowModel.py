@@ -5,7 +5,8 @@ from tensorflow.python.platform import gfile
 class TensorflowModel(object):
 
     def __init__(self, modelPath):
-        self.model = self.loadModel(modelPath)
+        self.sess = None
+        self.loadModel(modelPath)
 
     def loadModel(self, modelPath):
         # Load the saved graph
@@ -19,4 +20,14 @@ class TensorflowModel(object):
                       'PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python ipython\n' +
                       'See here for info: ' +
                       'https://github.com/tf/tf/issues/582')
-            return graph_def
+
+            self.sess = tf.Session()
+            tf.import_graph_def(graph_def, name="")
+
+            return
+
+    def getGraph(self):
+        return self.sess.graph
+
+    def getSession(self):
+        return self.sess

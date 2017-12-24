@@ -1,6 +1,7 @@
 import _init_paths
 import argparse
 import os
+from tensorflow.python.tools.freeze_graph import freeze_graph
 
 from config.ConfigParams import ConfigParams
 from data.DatasetMetadata import DatasetMetadata
@@ -47,17 +48,22 @@ def main():
     # Load base model graph
     baseTFModel = TensorflowModel(os.path.join(args.modelDir, "graph.pb"))
 
-    # TODO: Append classifier for fine tuning training (use ModelFactory)
+    # Append classifier for fine tuning training
     trainingModel = ModelFactory.create(config=configParams, tfmodel=baseTFModel,
                                         dataProvider=dataProvider, trainDevice=trainDevice)
 
-    # TODO: Run training loading images
+    # Run training
     trainProcess = TrainProcess(config=configParams, trainingModel=trainingModel,
-                                dataProvider=dataProvider, outputDir=args.checkpointOutputDir)
+                                dataProvider=dataProvider, outputDir=args.checkpointOutputDir,
+                                tensorboardDir=args.tensorboardDir)
     trainProcess.runTrain()
 
-    # TODO: Save fine tuned model
-    return
+    # Freeze graph (graphdef plus parameters),
+    # this includes in the graph only the layers needed to provide the output_node_names
+    freeze_graph(input_graph=args.checkpointOutputDir + "/model_graph.pb", input_saver="", input_binary=True,
+                input_checkpoint=args.checkpointOutputDir + "/model", output_node_names="softmax_fn",
+                restore_op_name="save/restore_all", filename_tensor_name="save/Const:0",
+                output_graph=args.modelOutputDir + "/graph.pb", clear_devices=True, initializer_nodes="")
 
 
 if __name__ == '__main__':

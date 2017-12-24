@@ -5,17 +5,24 @@ from tqdm import tqdm
 
 class TrainProcess(object):
 
-    def __init__(self, config, trainingModel, dataProvider, outputDir):
+    def __init__(self, config, trainingModel, dataProvider, outputDir, tensorboardDir=None):
 
         self.config = config
         self.trainingModel = trainingModel
         self.dataProvider = dataProvider
         self.outputDir = outputDir
-        self.summaryWriter = None
+        self.summaryWriter = self.tensorboard(tensorboardDir)
+
+    def tensorboard(self, tensorboardDir):
+        # Enable the tensorboard
+        if tensorboardDir is not None:
+            print("Writing on tensorboard")
+            return tf.summary.FileWriter(tensorboardDir, graph=self.trainingModel.getGraph())
+        return None
 
     def runTrain(self):
 
-        numEpochs = self.config.numEpochs
+        numEpochs = self.config.epochs
         with self.trainingModel.getSession() as sess:
 
             trainImagesProvider, trainLabelsProvider = self.dataProvider.readTFExamplesTraining()
@@ -76,13 +83,6 @@ class TrainProcess(object):
 
         init_op = tf.group(tf.global_variables_initializer(), tf.local_variables_initializer())
         return init_op
-
-    def tensorboard(self, tensorboardDir):
-        # Enable the tensorboard
-        if tensorboardDir is not None:
-            print("Writing on tensorboard")
-            self.summaryWriter = tf.summary.FileWriter(tensorboardDir, graph=self.trainingModel.getGraph())
-        return self
 
     def trainEpoch(self, session, epochIndex, trainingBatchesNum, trainImagesProvider, trainLabelsProvider):
 
