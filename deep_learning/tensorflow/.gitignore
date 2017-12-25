@@ -1,1 +1,4 @@
 .idea
+export
+trainedModels
+tensorboard

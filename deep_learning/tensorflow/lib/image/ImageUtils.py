@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 from .ImageException import ImageException
+from constants.Constants import Constants as const
 
 
 class ImageUtils(object):
@@ -49,9 +50,11 @@ class ImageUtils(object):
 
         image = image.astype(np.float32)
 
-        if preprocessingType == constants.PreprocessingType.vgg:
-            image = cls.preprocessVgg(image, imageParams.mean)
-        elif preprocessingType == constants.PreprocessingType.inception:
+        if preprocessingType == const.PreprocessingType.vgg:
+            raise Exception("Preprocessing type " + preprocessingType + " not supported")
+            # TODO: Add support for VGG preprocessing (useful for SqueezeNet)
+            #image = cls.preprocessVgg(image, imageParams.mean)
+        elif preprocessingType == const.PreprocessingType.inception:
             image = cls.preprocessInception(image)
         else:
             raise Exception("Preprocessing type " + preprocessingType + " not supported")

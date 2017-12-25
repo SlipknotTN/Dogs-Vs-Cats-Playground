@@ -17,14 +17,15 @@ def doParsing():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
         description='Tensorflow image classification fine tuning')
     parser.add_argument('--datasetDir', required=True, default=None, help='Dataset directory')
-    parser.add_argument('--modelDir', type=str, required=True, help='Base model folder')
+    parser.add_argument('--baseModelDir', type=str, required=True, help='Base model folder')
     parser.add_argument('--checkpointOutputDir', required=False, default="./export",
                         help='Output folder that will contains checkpoints')
     parser.add_argument('--modelOutputDir', required=False, default="./export",
                         help='Output folder that will contains final trained model graph.pb')
     parser.add_argument('--configFile', required=True, help='Config File for training')
     parser.add_argument('--tensorboardDir', required=False, default=None, help="TensorBoard directory")
-    parser.add_argument('--useGpu', type=str, required=False, default=None, help='Gpu to use for the training ')
+    parser.add_argument('--useGpu', type=str, required=False, default=None,
+                        help='Gpu ID to use for the training (default CPU training)')
     return parser.parse_args()
 
 
@@ -46,7 +47,7 @@ def main():
         configParams=configParams)
 
     # Load base model graph
-    baseTFModel = TensorflowModel(os.path.join(args.modelDir, "graph.pb"))
+    baseTFModel = TensorflowModel(os.path.join(args.baseModelDir, "graph.pb"))
 
     # Append classifier for fine tuning training
     trainingModel = ModelFactory.create(config=configParams, tfmodel=baseTFModel,
@@ -61,9 +62,9 @@ def main():
     # Freeze graph (graphdef plus parameters),
     # this includes in the graph only the layers needed to provide the output_node_names
     freeze_graph(input_graph=args.checkpointOutputDir + "/model_graph.pb", input_saver="", input_binary=True,
-                input_checkpoint=args.checkpointOutputDir + "/model", output_node_names="softmax_fn",
-                restore_op_name="save/restore_all", filename_tensor_name="save/Const:0",
-                output_graph=args.modelOutputDir + "/graph.pb", clear_devices=True, initializer_nodes="")
+                 input_checkpoint=args.checkpointOutputDir + "/model", output_node_names="softmax_fn",
+                 restore_op_name="save/restore_all", filename_tensor_name="save/Const:0",
+                 output_graph=args.modelOutputDir + "/graph.pb", clear_devices=True, initializer_nodes="")
 
 
 if __name__ == '__main__':
