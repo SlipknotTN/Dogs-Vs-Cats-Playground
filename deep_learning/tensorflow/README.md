@@ -18,4 +18,5 @@ Saved best epoch on validation accuracy.
 
 | Model | Input Size | HyperParameters | Validation accuracy | Kaggle LogLoss|
 |-------|------------|-----------------|---------------|------------------|
-| MobileNet 1.0  | 224x224 | 20 epochs, LR Fixed 0.001, SGD optimizer | 0.9840 | 0.07604 |
+| MobileNet 1.0  | 224x224 | 20 epochs, LR Fixed 0.001, SGD optimizer | 0.9854 | 0.07604 |
+| MobileNet 1.0  | 224x224 | 20 epochs, LR Start from 0.001, ADAM optimizer | 0.9896 | 0.07090 |
