@@ -53,18 +53,19 @@ class DatasetTFReader(DatasetReader):
                 image = tf.decode_raw(features[constants.DatasetFeatures.image], tf.uint8)
             elif str.lower(str(self.configParams.imageEncoding)) == "jpeg":
                 # Image stored as uint8 RGB
-                # FIXME: Input channels not used during dataset saving, need to do it
-                image = tf.image.decode_jpeg(features[constants.DatasetFeatures.image],
-                                             channels=self.configParams.inputChannels)
+                image = tf.image.decode_jpeg(features[constants.DatasetFeatures.image], channels=3)
             else:
                 raise Exception("Image encoding " + self.configParams.imageEncoding + " not supported")
 
             # Cast label data into int64
             label = tf.cast(features[constants.DatasetFeatures.label], tf.int64)
 
-            # Reshape image data into the original shape, HWC
-            image = tf.reshape(image, [self.configParams.inputSize, self.configParams.inputSize,
-                                       self.configParams.inputChannels])
+            # Reshape image data into the original shape of the JPEG image, HWC
+            image = tf.reshape(image, [self.configParams.inputSize, self.configParams.inputSize, 3])
+
+            # Optional grayscale conversion if the model has BW input
+            if self.configParams.inputChannels == 1:
+                image = tf.image.rgb_to_grayscale(image)
 
             # Convert image format to float32 to match model input type
             image = tf.cast(image, tf.float32)

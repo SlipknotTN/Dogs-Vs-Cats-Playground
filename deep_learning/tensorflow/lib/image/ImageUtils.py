@@ -11,7 +11,7 @@ class ImageUtils(object):
     @classmethod
     def loadImage(cls, imageFile):
         """
-        Load image with OpenCV
+        Load image with OpenCV (forced to read as RGB)
         :param imageFile:
         :return: ndarray uint8 HWC-RGB
         """

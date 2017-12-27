@@ -46,7 +46,8 @@ class DatasetTFWriter(DatasetWriter):
 
         # Placeholder and encode_jpeg op, it doesn't support float32
         imageInput = tf.placeholder(dtype=tf.uint8)
-        imageEncodingOp = tf.image.encode_jpeg(imageInput)
+        # JPEG encoding optional TF op (forced to save as RGB image)
+        imageEncodingOp = tf.image.encode_jpeg(imageInput, format="rgb")
 
         for sample in tqdm(samplesList, desc=subset + " dataset creation progress"):
 
