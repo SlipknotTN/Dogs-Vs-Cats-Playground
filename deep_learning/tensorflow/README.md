@@ -6,7 +6,8 @@ Example usage of tensorflow to classify dogs and cats images (from Kaggle challe
 
 ### MobileNet
 
-Mobilenet pretrained on ImageNet, trained from scratch only the last convolution layer to classify the target classes. [[Paper]](https://arxiv.org/abs/1704.04861) [[Official TF slim models]](https://github.com/tensorflow/models/blob/master/research/slim/nets/mobilenet_v1.md)
+Start from Mobilenet pretrained on ImageNet, trained from scratch only the last convolution layer to classify the target classes. [[Paper]](https://arxiv.org/abs/1704.04861) [[Official TF slim models]](https://github.com/tensorflow/models/blob/master/research/slim/nets/mobilenet_v1.md).
+First of all you need to put the pretrained graph.pb in baseModels/mobilenet directory, see [MobileNet README](./baseModels/mobilenet/README.md).
 
 **Image format:** RGB.
 

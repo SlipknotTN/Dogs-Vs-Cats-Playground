@@ -2,11 +2,6 @@ import argparse
 
 from tensorflow.python.tools.freeze_graph import freeze_graph
 
-#TODO: Add a guide and a reference to official way to export tf slim model
-# First step to export graph_def is needed
-
-#python export_inference_graph.py   --alsologtostderr   --model_name=mobilenet_v1   --image_size=224
-# --output_file=../../../mobilenet/mobilenet_v1_224_graph_def.pb
 
 def doParsing():
 
@@ -26,7 +21,7 @@ def main():
                  input_checkpoint=args.modelDir + "/mobilenet_v1_1.0_224.ckpt",
                  output_node_names="MobilenetV1/Predictions/Reshape_1",
                  restore_op_name="save/restore_all", filename_tensor_name="save/Const:0",
-                 output_graph=args.outputDir + "/mobilenet_v1_224_graph.pb", clear_devices=True, initializer_nodes="")
+                 output_graph=args.outputDir + "/graph.pb", clear_devices=True, initializer_nodes="")
 
 
 if __name__ == '__main__':
