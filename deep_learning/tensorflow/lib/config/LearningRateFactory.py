@@ -9,22 +9,18 @@ class LearningRateFactory(object):
     def createLearningRate(cls, optimizerParams, trainBatches, globalStepVar):
 
         if optimizerParams.lr_params.decayPolicy == constants.LRPolicy.fixed:
-
             learningRate = optimizerParams.learning_rate
 
-        # TODO: Support exponential LR policy
-        # elif optimizerParams.lr_params.decayPolicy == constants.LRPolicy.exponential:
-        #
-        #     # Convert decay step from epochs (as written in config) to batches number
-        #     learningRateDecayStep = optimizerParams.lr_params.lrDecayStep * trainBatches
-        #     learningRate = tf.train.exponential_decay(learning_rate=optimizerParams.learning_rate,
-        #                                               global_step=globalStepVar,
-        #                                               decay_steps=learningRateDecayStep,
-        #                                               decay_rate=optimizerParams.lr_params.lrDecayRate,
-        #                                               staircase=True)
+        elif optimizerParams.lr_params.decayPolicy == constants.LRPolicy.exponential:
+            # Convert decay step from epochs (as written in config) to batches number
+            learningRateDecayStep = optimizerParams.lr_params.lrDecayStep * trainBatches
+            learningRate = tf.train.exponential_decay(learning_rate=optimizerParams.learning_rate,
+                                                      global_step=globalStepVar,
+                                                      decay_steps=learningRateDecayStep,
+                                                      decay_rate=optimizerParams.lr_params.lrDecayRate,
+                                                      staircase=True)
 
         else:
-
             raise Exception('LR Policy ' + optimizerParams.lr_params.decayPolicy + 'not supported')
 
         return learningRate
