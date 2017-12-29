@@ -2,6 +2,8 @@
 
 Example usage of tensorflow to classify dogs and cats images (from Kaggle challenge [Dogs Vs Cats Redux](https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition)).
 
+To use Nasnet model you need at least Tensorflow 1.4.
+
 ## Models
 
 ### MobileNet
