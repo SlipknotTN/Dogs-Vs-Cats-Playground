@@ -25,7 +25,7 @@ def doParsing():
     parser.add_argument('--configFile', required=True, help='Config File for training')
     parser.add_argument('--tensorboardDir', required=False, default=None, help="TensorBoard directory")
     parser.add_argument('--useGpu', type=str, required=False, default=None,
-                        help='Gpu ID to use for the training (default CPU training)')
+                        help='GPU ID to use for the training (default CPU training)')
     return parser.parse_args()
 
 
@@ -62,7 +62,7 @@ def main():
     # Freeze graph (graphdef plus parameters),
     # this includes in the graph only the layers needed to provide the output_node_names
     freeze_graph(input_graph=args.checkpointOutputDir + "/model_graph.pb", input_saver="", input_binary=True,
-                 input_checkpoint=args.checkpointOutputDir + "/model", output_node_names="softmax_fn",
+                 input_checkpoint=args.checkpointOutputDir + "/model", output_node_names=configParams.outputName,
                  restore_op_name="save/restore_all", filename_tensor_name="save/Const:0",
                  output_graph=args.modelOutputDir + "/graph.pb", clear_devices=True, initializer_nodes="")
 

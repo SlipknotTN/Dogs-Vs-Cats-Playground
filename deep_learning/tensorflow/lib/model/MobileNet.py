@@ -12,7 +12,7 @@ class MobileNet(ClassificationModel):
         ## Tensorflow Placeholders
         with tf.device(trainDevice):
             # Image placeholder, shape NHWC, you need to provide BGR images
-            self.x = model.getGraph().get_tensor_by_name("input:0")
+            self.x = model.getGraph().get_tensor_by_name(configParams.inputName + ":0")
             # Ground truth placeholder (one-hot encoding)
             self.y = tf.placeholder(dtype=tf.int32, shape=[None, self.dataProvider.datasetMetadata.numClasses], name="y")
 
@@ -20,7 +20,7 @@ class MobileNet(ClassificationModel):
         with tf.device(trainDevice):
             # Loaded model is freezed in test mode
             inputLayerTrainedFromScratch = model.getGraph().get_tensor_by_name(
-                'MobilenetV1/Logits/Dropout_1b/Identity:0')
+                configParams.lastFrozenLayerName + ":0")
             layersTrainedFromScratchNames = ["Conv2d_1c_1x1_fn"]
 
             # Tensorflow ops for layers representation

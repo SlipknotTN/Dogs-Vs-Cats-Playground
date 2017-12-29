@@ -46,8 +46,8 @@ def main():
 
     results = []
 
-    inputPlaceholder = model.getGraph().get_tensor_by_name("input:0")
-    outputTensor = model.getGraph().get_tensor_by_name("softmax_fn:0")
+    inputPlaceholder = model.getGraph().get_tensor_by_name(config.inputName + ":0")
+    outputTensor = model.getGraph().get_tensor_by_name(config.outputName + ":0")
 
     # One by one image prediction forcing CPU usage
     with model.getSession() as sess:

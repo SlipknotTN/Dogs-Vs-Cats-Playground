@@ -20,6 +20,9 @@ class ConfigParams(object):
         self.inputSize = config.getint(const.ConfigSection.model, "inputSize", fallback=224)
         self.inputChannels = config.getint(const.ConfigSection.model, "inputChannels", fallback=3)
         self.preprocessType = config.get(const.ConfigSection.model, "preprocessType", fallback="dummy")
+        self.inputName = config.get(const.ConfigSection.model, "inputName")
+        self.outputName = config.get(const.ConfigSection.model, "outputName")
+        self.lastFrozenLayerName = config.get(const.ConfigSection.model, "lastFrozenLayerName")
 
         # HyperParameters
         self.epochs = config.getint(const.ConfigSection.hyperparameters, "epochs")

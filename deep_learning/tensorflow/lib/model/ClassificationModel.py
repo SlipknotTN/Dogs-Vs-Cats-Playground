@@ -34,16 +34,14 @@ class ClassificationModel(object):
         Default trainable variables set (valid for simple classification fine tuning of the last layer)
         """
         with tf.device(self.trainDevice):
-
             # In fine tuning we train only the new layers
             self.varList = [v for v in tf.trainable_variables()
                             if v.name.split('/')[0] in layersTrainedFromScratchNames]
 
     def defineTrainingOperations(self):
-
         with tf.device(self.trainDevice):
             # Add softmax for deploy stage
-            self.output = tf.nn.softmax(self.logits, name="softmax_fn")
+            self.output = tf.nn.softmax(self.logits, name=self.configParams.outputName)
 
         with tf.device('/cpu:0'):
             self.globalStep = tf.Variable(0, trainable=False)

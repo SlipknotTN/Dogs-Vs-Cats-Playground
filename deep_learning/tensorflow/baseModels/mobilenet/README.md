@@ -29,7 +29,7 @@ python export_inference_graph.py \
   --alsologtostderr \
   --model_name=mobilenet_v1 \
   --image_size=224 \
-  --output_file=--output_file=../../../baseModels/mobilenet/mobilenet_v1_224_graph_def.pb
+  --output_file=../../../baseModels/mobilenet/mobilenet_v1_224_graph_def.pb
 ```
 
 #### Freezed Graph
