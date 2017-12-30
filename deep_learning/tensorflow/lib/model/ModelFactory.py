@@ -1,4 +1,5 @@
 from .MobileNet import MobileNet
+from .NasNetMobile import NasNetMobile
 
 
 class ModelFactory(object):
@@ -13,6 +14,9 @@ class ModelFactory(object):
             # return SqueezeNet(model=tfmodel, trainingParams=config,
             #                                dataProvider=dataProvider,
             #                                trainDevice=trainDevice)
+
+        elif config.architecture.lower() == "nasnet_mobile":
+            return NasNetMobile(configParams=config, model=tfmodel, dataProvider=dataProvider, trainDevice=trainDevice)
         elif config.architecture.lower() == "mobilenet":
             return MobileNet(configParams=config, model=tfmodel, dataProvider=dataProvider, trainDevice=trainDevice)
         else:

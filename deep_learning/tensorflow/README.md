@@ -23,4 +23,21 @@ Saved best epoch on validation accuracy.
 |-------|------------|-----------------|---------------|------------------|
 | MobileNet 1.0  | 224x224 | 20 epochs, LR Fixed 0.001, SGD optimizer | 0.9854 | 0.07604 |
 | MobileNet 1.0  | 224x224 | 20 epochs, LR Exponential Decay start from 0.001, SGD optimizer | 0.9852 | 0.07771 |
-| MobileNet 1.0  | 224x224 | 20 epochs, LR Start from 0.001, ADAM optimizer | 0.9896 | 0.07090 |
+| MobileNet 1.0  | 224x224 | 30 epochs, LR Start from 0.001, ADAM optimizer | 0.9896 | 0.07090 |
+
+### NasNet
+
+Start from Nasnet pretrained on ImageNet, trained from scratch only the last fully connected layer to classify the target classes. [[Paper]](TODO) [[Official TF slim models]](TODO).
+First of all you need to put the pretrained graph.pb in baseModels/nasnet_mobile directory, see [NasNet README](./baseModels/nasnet/README.md).
+
+**Image format:** RGB.
+
+**Image preprocessing:** transform from [0, 255] uint8 range to [-1.0, 1.0] float (Inception preprocessing).
+
+### Kaggle Results
+
+Saved best epoch on validation accuracy.
+
+| Model | Input Size | HyperParameters | Validation accuracy | Kaggle LogLoss|
+|-------|------------|-----------------|---------------|------------------|
+| NasNet Mobile  | 224x224 | 30 epochs, LR Start from 0.001, ADAM optimizer | 0.9916 | 0.05663 |
