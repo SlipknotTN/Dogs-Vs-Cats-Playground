@@ -4,6 +4,8 @@ Example usage of tensorflow to classify dogs and cats images (from Kaggle challe
 
 To use Nasnet model you need at least Tensorflow 1.4.
 
+To convert SqueezeNet model from caffe format you need python 2.7, other scripts are tested on python 3.
+
 ## Models
 
 ### MobileNet
@@ -27,7 +29,7 @@ Saved best epoch on validation accuracy.
 
 ### NasNet
 
-Start from Nasnet pretrained on ImageNet, trained from scratch only the last fully connected layer to classify the target classes. [[Paper]](TODO) [[Official TF slim models]](TODO).
+Start from Nasnet pretrained on ImageNet, trained from scratch only the last fully connected layer to classify the target classes. [[Paper]](https://arxiv.org/abs/1707.07012) [[Official TF slim models]](https://github.com/tensorflow/models/tree/master/research/slim/nets/nasnet).
 First of all you need to put the pretrained graph.pb in baseModels/nasnet_mobile directory, see [NasNet README](./baseModels/nasnet/README.md).
 
 **Image format:** RGB.
