@@ -1,3 +1,9 @@
 [submodule "deep_learning/tensorflow/tfmodels"]
 	path = deep_learning/tensorflow/tfmodels
 	url = https://github.com/tensorflow/models.git
+[submodule "deep_learning/tensorflow/baseModels/caffe-tensorflow"]
+	path = deep_learning/tensorflow/baseModels/caffe-tensorflow
+	url = https://github.com/SlipknotTN/caffe-tensorflow.git
+[submodule "deep_learning/tensorflow/baseModels/SqueezeNetCaffe"]
+	path = deep_learning/tensorflow/baseModels/squeezenet_caffe
+	url = https://github.com/SlipknotTN/SqueezeNet.git
