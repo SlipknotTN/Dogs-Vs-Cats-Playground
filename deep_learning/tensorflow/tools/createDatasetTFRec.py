@@ -12,15 +12,11 @@ from data.DatasetMetadata import DatasetMetadata
 def do_parsing():
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-        description='Script for classification fine tuning')
+        description='Script for tfrec crestion for classification task')
     parser.add_argument('--imagesDir', required=True,
                         help='Root folder containing images (single directory that has to be split')
     parser.add_argument('--configFile', required=True, type=str, help='Config file for dataset creation')
     parser.add_argument('--outputDir', required=True, help='TFRecords destination directory, use a clean directory')
-    parser.add_argument('--trainFile', required=False, default=None,
-                        help='File containing training examples filenames (without extensions)')
-    parser.add_argument('--valFile', required=False, default=None,
-                        help='File containing validation examples filenames (without extensions)')
     return parser.parse_args()
 
 
