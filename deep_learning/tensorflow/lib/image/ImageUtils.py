@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+
 from .ImageException import ImageException
 from constants.Constants import Constants as const
 
@@ -40,7 +41,7 @@ class ImageUtils(object):
         return rsz.astype(np.uint8)
 
     @classmethod
-    def preprocessing(cls, image, width, height, preprocessingType):
+    def preprocessing(cls, image, width, height, preprocessingType, meanRGB=None):
         """
         :param image ndarray RGB-HWC uint8 in range [0, 255]
         """
@@ -51,9 +52,7 @@ class ImageUtils(object):
         image = image.astype(np.float32)
 
         if preprocessingType == const.PreprocessingType.vgg:
-            raise Exception("Preprocessing type " + preprocessingType + " not supported")
-            # TODO: Add support for VGG preprocessing (useful for SqueezeNet)
-            #image = cls.preprocessVgg(image, imageParams.mean)
+            image = cls.preprocessVgg(image, meanRGB)
         elif preprocessingType == const.PreprocessingType.inception:
             image = cls.preprocessInception(image)
         else:
@@ -62,20 +61,21 @@ class ImageUtils(object):
         return image
 
     @classmethod
-    def preprocessVgg(cls, image, mean):
+    def preprocessVgg(cls, image, meanRGB):
         """
         VGG Processing (equal to AlexNet, SqueezeNet, GoogleNet, ...)
         :param image ndarray RGB-HWC float32 in range [0.0, 255.0]
-        :param mean Mean values RGB (ndarray of 3 elements)
+        :param meanRGB float list, Mean values RGB
         :return: processed image in format float32 HWC-RGB Tensor in range [0.0, 255.0]
-        minus mean (we can obtain negative values)
+        subtracted mean (we can obtain negative values)
         """
         assert (len(image.shape) == 3), "VGG preprocessing supports only 3 channels images"
 
         # Subtract mean
-        image[:,:,0] -= mean[0]
-        image[:,:,1] -= mean[1]
-        image[:,:,2] -= mean[2]
+        meanRGBarray = np.array(meanRGB, dtype=np.float32)
+        image[:,:,0] -= meanRGBarray[0]
+        image[:,:,1] -= meanRGBarray[1]
+        image[:,:,2] -= meanRGBarray[2]
         return image
 
     @classmethod
@@ -91,3 +91,15 @@ class ImageUtils(object):
         image *= 2.0
         return image
 
+    @classmethod
+    def convertImageFormat(cls, image, format):
+        """
+        Convert image colorspace
+        :param image: image ndarray RGB-HWC float32
+        :param format: RGB or BGR
+        :return: converted image
+        """
+        if format == "RGB":
+            return image
+        elif format == "BGR":
+            return cv2.cvtColor(image, cv2.COLOR_RGB2BGR)

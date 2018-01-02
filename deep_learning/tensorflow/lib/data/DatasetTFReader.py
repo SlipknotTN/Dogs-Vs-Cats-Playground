@@ -74,12 +74,17 @@ class DatasetTFReader(DatasetReader):
             label = tf.one_hot(label, depth=self.datasetMetadata.numClasses)
 
             # Preprocess image (resize, mean subtraction, ...)
-            # For simplicity we have created the dataset with images ready for the model, no need to further resize
-            # Furthermore width = height = inputSize
+            # For simplicity we create the dataset with images ready for the model, no need to further resize
+            # So width = height = inputSize
             modelInputHeight = self.configParams.inputSize
             modelInputWidth = self.configParams.inputSize
             image = ImageUtilsTF.preprocessing(image, width=modelInputWidth, height=modelInputHeight,
-                                               preprocessingType=self.configParams.preprocessType)
+                                               preprocessingType=self.configParams.preprocessType,
+                                               meanRGB=self.configParams.meanRGB)
+
+            # Optional BGR conversion (depending on the model)
+            if self.configParams.inputFormat == "BGR":
+                image = tf.reverse(image, axis=[-1])
 
             # Random mirroring
             image = tf.image.random_flip_left_right(image, seed=0)

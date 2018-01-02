@@ -59,7 +59,11 @@ def main():
                 image = ImageUtils.loadImage(file)
                 # Resize image and preprocess (inception or vgg preprocessing based on config)
                 processedImage = ImageUtils.preprocessing(image=image, width=config.inputSize, height=config.inputSize,
-                                                          preprocessingType=config.preprocessType)
+                                                          preprocessingType=config.preprocessType,
+                                                          meanRGB=config.meanRGB)
+
+                # Convert colorspace
+                processedImage = ImageUtils.convertImageFormat(processedImage, format=config.inputFormat)
 
                 # Add 1st dimension for image index in batch
                 processedImage = np.expand_dims(processedImage, axis=0)

@@ -1,4 +1,6 @@
 import configparser
+import json
+
 from constants.Constants import Constants as const
 from .OptimizerParamsFactory import OptimizerParamsFactory
 from .LRPolicyParams import LRPolicyParams
@@ -19,7 +21,11 @@ class ConfigParams(object):
             self.mobilenetAlpha = config.getfloat(const.ConfigSection.model, "mobilenetAlpha", fallback=1.0)
         self.inputSize = config.getint(const.ConfigSection.model, "inputSize", fallback=224)
         self.inputChannels = config.getint(const.ConfigSection.model, "inputChannels", fallback=3)
+        self.inputFormat = config.get(const.ConfigSection.model, "inputFormat", fallback="RGB")
         self.preprocessType = config.get(const.ConfigSection.model, "preprocessType", fallback="dummy")
+        self.meanRGB = None
+        if self.preprocessType == "vgg":
+            self.meanRGB = json.loads(config.get(const.ConfigSection.model, "meanRGB", fallback="[0.0, 0.0, 0.0]"))
         self.inputName = config.get(const.ConfigSection.model, "inputName")
         self.outputName = config.get(const.ConfigSection.model, "outputName")
         self.lastFrozenLayerName = config.get(const.ConfigSection.model, "lastFrozenLayerName")

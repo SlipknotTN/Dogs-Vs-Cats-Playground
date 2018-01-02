@@ -10,7 +10,7 @@ To convert SqueezeNet model from caffe format you need python 2.7, other scripts
 
 ### MobileNet
 
-Start from Mobilenet pretrained on ImageNet, trained from scratch only the last convolution layer to classify the target classes. [[Paper]](https://arxiv.org/abs/1704.04861) [[Official TF slim models]](https://github.com/tensorflow/models/blob/master/research/slim/nets/mobilenet_v1.md).
+Started from Mobilenet pretrained on ImageNet, trained from scratch only the last convolution layer to classify the target classes. [[Paper]](https://arxiv.org/abs/1704.04861) [[Official TF slim models]](https://github.com/tensorflow/models/blob/master/research/slim/nets/mobilenet_v1.md).
 First of all you need to put the pretrained graph.pb in baseModels/mobilenet directory, see [MobileNet README](./baseModels/mobilenet/README.md).
 
 **Image format:** RGB.
@@ -29,7 +29,7 @@ Saved best epoch on validation accuracy.
 
 ### NasNet
 
-Start from Nasnet pretrained on ImageNet, trained from scratch only the last fully connected layer to classify the target classes. [[Paper]](https://arxiv.org/abs/1707.07012) [[Official TF slim models]](https://github.com/tensorflow/models/tree/master/research/slim/nets/nasnet).
+Started from Nasnet pretrained on ImageNet, trained from scratch only the last fully connected layer to classify the target classes. [[Paper]](https://arxiv.org/abs/1707.07012) [[Official TF slim models]](https://github.com/tensorflow/models/tree/master/research/slim/nets/nasnet).
 First of all you need to put the pretrained graph.pb in baseModels/nasnet_mobile directory, see [NasNet README](./baseModels/nasnet/README.md).
 
 **Image format:** RGB.
@@ -43,3 +43,20 @@ Saved best epoch on validation accuracy.
 | Model | Input Size | HyperParameters | Validation accuracy | Kaggle LogLoss|
 |-------|------------|-----------------|---------------|------------------|
 | NasNet Mobile  | 224x224 | 30 epochs, LR Start from 0.001, ADAM optimizer | 0.9916 | 0.05663 |
+
+### SqueezeNet
+
+Started from SqueezeNet pretrained on ImageNet, trained from scratch only the last convolution layer to classify the target classes. [[Paper]](https://arxiv.org/abs/1602.07360) [[Official Caffe models]](https://github.com/DeepScale/SqueezeNet).
+First of all you need to put the pretrained graph.pb in baseModels/squeezenet_v1.1 directory, see [SqueezeNet README](./baseModels/squeezenet_v1.1/README.md).
+
+**Image format:** BGR (base model is trained with caffe)
+
+**Image preprocessing:** input image in range [0.0, 255.0] float, then subtract the imagenet mean image (VGG preprocessing).
+
+### Kaggle Results
+
+Saved best epoch on validation accuracy.
+
+| Model | Input Size | HyperParameters | Validation accuracy | Kaggle LogLoss|
+|-------|------------|-----------------|---------------|------------------|
+| SqueezeNet v1.1  | 227x227 | 30 epochs, LR Start from 0.001, ADAM optimizer | 0.9792 | 0.12585 |
