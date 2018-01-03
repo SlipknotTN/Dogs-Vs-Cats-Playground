@@ -7,7 +7,7 @@ from tensorflow.python.platform import gfile
 def doParsing():
 
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-                                     description='Load graph to tensorboard script')
+                                     description='Script to load graph file to tensorboard script')
     parser.add_argument('--modelPath', required=True, help="Model pb file path")
     parser.add_argument('--tensorboardOutputDir', required=False, default="./tensorboard/temp",
                         help="Output directory for tensorboard")

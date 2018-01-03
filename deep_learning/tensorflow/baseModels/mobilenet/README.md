@@ -21,7 +21,7 @@ However it relies on slim to correct load the arg scope, so I preferred to stick
 Download the MobileNet v1.0 224 model checkpoint from [Tensorflow Models Github repo](https://github.com/tensorflow/models/tree/d07447a3e34bc66acd9ba7267437ebe9d15b45c0/research/slim).
 Extract the files in this directory.
 
-#### Graph Def Save
+#### Save Graph Def
 Use the *export_inference_graph.py* script from slim repository (placed in *tfmodels/research/slim*).
 
 ```
@@ -32,7 +32,7 @@ python export_inference_graph.py \
   --output_file=../../../baseModels/mobilenet/mobilenet_v1_224_graph_def.pb
 ```
 
-#### Freezed Graph
+#### Freeze Graph
 To freeze the graph, we need the checkpoint for the correct model retrieved from [Tensorflow Models Github repo](https://github.com/tensorflow/models/tree/d07447a3e34bc66acd9ba7267437ebe9d15b45c0/research/slim).
 The official slim tutorial suggest to use the c++ API, but it needs to compile the whole tensorflow library, so I prefer the python API.
 
