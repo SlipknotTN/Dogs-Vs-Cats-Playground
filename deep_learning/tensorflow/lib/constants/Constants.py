@@ -31,11 +31,9 @@ class Constants(object):
         label = "label"
         image = "image"
 
-
     class TrainConfig:
 
         # Sections
-        hyperParameters = "HYPERPARAMETERS"
         adadelta = "ADADELTA"
         adagrad = "ADAGRAD"
         sgd = "SGD"

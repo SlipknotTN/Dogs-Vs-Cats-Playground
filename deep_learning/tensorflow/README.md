@@ -17,7 +17,7 @@ First of all you need to put the pretrained graph.pb in baseModels/mobilenet dir
 
 **Image preprocessing:** transform from [0, 255] uint8 range to [-1.0, 1.0] float (Inception preprocessing).
 
-### Kaggle Results
+#### Kaggle Results
 
 Saved best epoch on validation accuracy.
 
@@ -36,7 +36,7 @@ First of all you need to put the pretrained graph.pb in baseModels/nasnet_mobile
 
 **Image preprocessing:** transform from [0, 255] uint8 range to [-1.0, 1.0] float (Inception preprocessing).
 
-### Kaggle Results
+#### Kaggle Results
 
 Saved best epoch on validation accuracy.
 
@@ -53,7 +53,7 @@ First of all you need to put the pretrained graph.pb in baseModels/squeezenet_v1
 
 **Image preprocessing:** input image in range [0.0, 255.0] float, then subtract the imagenet mean image (VGG preprocessing).
 
-### Kaggle Results
+#### Kaggle Results
 
 Saved best epoch on validation accuracy.
 
@@ -74,7 +74,7 @@ Utilities:
 
 The directory *config* contains both dataset and training parameters for each model. You only need to pass a different config to the scripts to change model and hyperparameters.
 
-The script calls examples considers that *../../kaggle_dataset* (kaggle_dataset in repo root) is a symlink to the extracted dogs vs cats kaggle dataset and contains this subdirectories:
+The script calls examples considers that *../../kaggle_dataset* (kaggle_dataset in repo root) contains the extracted dogs vs cats kaggle dataset and contains this subdirectories:
 - train: full training images
 - test: test images for the competition
 
@@ -85,7 +85,7 @@ Each model input size requires a different dataset, for simplicity we don't resi
 #### TFRec creation examples
 
 Run script from *tensorflow* directory.
-The script get as input argument the full dataset input directory and automatically performs validation split.
+The script get as argument the full dataset train directory and automatically performs validation split.
 
 SqueezeNet with input images 227x227x3:
 ```
@@ -116,7 +116,6 @@ After final freeze graph of the trained model, we discard the 1000 classes speci
 If you would like to continue training of existing weights, you need to load checkpoint instead of frozen graph.
 
 The training script supports tensorboard for validation accuracy trend analysis over time and saves best epoch model on validation accuracy (checkpoint to continue training and frozen graph for deploy).
-
 
 #### Training examples
 
