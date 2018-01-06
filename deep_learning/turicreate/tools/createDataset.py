@@ -1,10 +1,13 @@
+import _init_paths
+
 import os
 import argparse
 import glob
 
 import turicreate as tc
-
 from tqdm import tqdm
+
+from config.ConfigParams import ConfigParams
 
 
 def doParsing():
@@ -29,9 +32,10 @@ def main():
 
         for imageFile in tqdm(glob.glob(os.path.join(args.imagesDir, classSubDir) + "/*.jpg")):
 
+            # We can directly save the image without resizing
+            # (performed automatically to model input size during training)
             image = tc.Image(imageFile)
-            imageResized = tc.image_analysis.resize(image, width=227, height=227, channels=3)
-            sframeDict["features"].append(imageResized)
+            sframeDict["features"].append(image)
             sframeDict["targets"].append(classSubDir)
 
     print("Saving SFrame...")
