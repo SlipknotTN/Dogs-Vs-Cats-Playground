@@ -63,7 +63,7 @@ class Model(object):
         fineTunedModel.add(Flatten())
 
         # Final sofmax for deploy stage
-        fineTunedModel.add(Activation('softmax'))
+        fineTunedModel.add(Activation('softmax', name="softmax"))
 
         # Freeze the base model layers, train only the last convolution
         if retrainAll is False:
