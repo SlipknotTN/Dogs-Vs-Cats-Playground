@@ -66,13 +66,17 @@ def main():
                   optimizer=optimizers.SGD(lr=config.learningRate, momentum=config.momentum),
                   metrics=['categorical_accuracy'])
 
+    # TODO: Explains monitors in README
+
     # Callbacks for early stopping, LR step reducing and best model save
-    earlyStoppingCB = EarlyStopping(monitor='val_categorical_accuracy', min_delta=0, patience=config.patience, verbose=1, mode='auto')
+    earlyStoppingCB = EarlyStopping(monitor='val_categorical_accuracy', min_delta=0, patience=config.patience,
+                                    verbose=1, mode='auto')
     
     modelChkptCB = ModelCheckpoint(args.modelOutputPath, monitor='val_categorical_accuracy', verbose=1, save_best_only=True,
                                    save_weights_only=False, mode='auto', period=1)
 
-    reduceLROnPlateau = ReduceLROnPlateau(monitor='val_categorical_accuracy', factor=0.1, patience=config.patience / 2, verbose=1)
+    reduceLROnPlateau = ReduceLROnPlateau(monitor='val_categorical_accuracy', factor=0.1,
+                                          patience=config.patience / 2, verbose=1)
 
     # fine-tune the model
     model.fit_generator(
