@@ -13,7 +13,7 @@ My setup is a notebook with:
 - RAM 16 GB
 - Ubuntu 16.04
 
-![Dogs Vs Cats](https://kaggle2.blob.core.windows.net/competitions/kaggle/5441/logos/front_page.png)
+<p align="center"><img src="https://kaggle2.blob.core.windows.net/competitions/kaggle/5441/logos/front_page.png" alt="Dogs Vs Cats"></p>
 
 ## Dataset
 
@@ -27,5 +27,6 @@ Each subproject is standalone and you can refer to subsequent links:
 - [ ] Deep Forest: [example](https://www.kaggle.com/demoon/the-nature-conservancy-fisheries-monitoring/deep-forest-1-4-public-log-loss-with-1-5-data)
 - Deep Learning
     - [x] [Keras](/deep_learning/keras): pretrained MobileNet, custom model defined with Sequential API
-    - [ ] [Tensorflow](/deep_learning/tensorflow): pretrained MobileNet, pretrained SqueezeNet, pretrained NasNet, custom model
+    - [x] [Tensorflow](/deep_learning/tensorflow): pretrained MobileNet, pretrained SqueezeNet, pretrained NasNet, custom model
+    - [x] [TuriCreate](/deep_learning/turicreate): pretrained SqueezeNet
     - [ ] PyTorch
