@@ -13,7 +13,7 @@ My setup is a notebook with:
 - RAM 16 GB
 - Ubuntu 16.04
 
-<p align="center"><img src="https://kaggle2.blob.core.windows.net/competitions/kaggle/5441/logos/front_page.png" alt="Dogs Vs Cats"></p>
+<p align="center"><img src="https://tbolttimes.com/wp-content/uploads/2016/03/dogs-and-cats.jpg" alt="Dogs Vs Cats"></p>
 
 ## Dataset
 
