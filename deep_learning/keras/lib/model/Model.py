@@ -17,7 +17,7 @@ class Model(object):
 
         # Convolutions with stride 2 are like convolution + pooling
         # 2x smaller on width and height -> 112x112x64
-        model.add(Conv2D(kernel_size=(3, 3), strides=(1, 1), filters=64,
+        model.add(Conv2D(kernel_size=(7, 7), strides=(1, 1), filters=64,
                          input_shape=inputShape,
                          padding='same', activation='relu', name="conv1"))
         model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2), padding="same"))
@@ -34,17 +34,17 @@ class Model(object):
         model.add(
             Conv2D(kernel_size=(3, 3), strides=(2, 2), filters=512, padding='same', activation='relu', name="conv4"))
 
-        # 2x smaller on width and height -> 7x7x1024
+        # 2x smaller on width and height -> 7x7x512
         model.add(
-            Conv2D(kernel_size=(3, 3), strides=(2, 2), filters=1024, padding='same', activation='relu', name="conv5"))
+            Conv2D(kernel_size=(3, 3), strides=(2, 2), filters=512, padding='same', activation='relu', name="conv5"))
 
         # Final classifier
 
         # Double Fully connected
         model.add(Dropout(rate=0.5))
         model.add(Flatten())
-        model.add(Dense(units=1024))
-        model.add(Dense(units=numClasses))
+        model.add(Dense(units=2048, activation="relu"))
+        model.add(Dense(units=numClasses, activation="linear"))
 
         # Conv 1x1 + GAP
         #model.add(Dropout(rate=0.5))
