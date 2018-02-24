@@ -57,7 +57,7 @@ def main():
         shuffle=False)
 
     # Load model using config file
-    model = ModelsFactory.create(config, trainGenerator.num_class)
+    model = ModelsFactory.create(config, trainGenerator.num_classes)
 
     print(model.summary())
 
