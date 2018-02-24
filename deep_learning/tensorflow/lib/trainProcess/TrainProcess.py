@@ -28,7 +28,9 @@ class TrainProcess(object):
             trainImagesProvider, trainLabelsProvider = self.dataProvider.readTFExamplesTraining()
             valImagesProvider, valLabelsProvider = self.dataProvider.readTFExamplesValidation()
 
-            # We must avoid initialization for layers not trained from scratch (freezed or fine tuned)
+            # We must avoid initialization for layers not trained from scratch (freezed or fine tuned),
+            # but we have loaded from frozen graph or we are trying a whole training from scratch,
+            # so the available variables are only the new one (associated to trainable layers)
             init_op = self.getInitializers()
             sess.run(init_op)
 

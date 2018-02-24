@@ -28,7 +28,8 @@ class ConfigParams(object):
             self.meanRGB = json.loads(config.get(const.ConfigSection.model, "meanRGB", fallback="[0.0, 0.0, 0.0]"))
         self.inputName = config.get(const.ConfigSection.model, "inputName")
         self.outputName = config.get(const.ConfigSection.model, "outputName")
-        self.lastFrozenLayerName = config.get(const.ConfigSection.model, "lastFrozenLayerName")
+        # Used only for fine tuning training
+        self.lastFrozenLayerName = config.get(const.ConfigSection.model, "lastFrozenLayerName", fallback=None)
 
         # HyperParameters
         self.epochs = config.getint(const.ConfigSection.hyperparameters, "epochs")

@@ -9,9 +9,9 @@ class NasNetMobile(ClassificationModel):
 
         ClassificationModel.__init__(self, configParams, model, dataProvider, trainDevice)
 
-        ## Tensorflow Placeholders
+        # Tensorflow Placeholders
         with tf.device(trainDevice):
-            # Image placeholder, shape NHWC, you need to provide BGR images
+            # Image placeholder, shape NHWC
             self.x = model.getGraph().get_tensor_by_name(configParams.inputName + ":0")
             # Ground truth placeholder (one-hot encoding)
             self.y = tf.placeholder(dtype=tf.int32, shape=[None, self.dataProvider.datasetMetadata.numClasses], name="y")
@@ -43,5 +43,7 @@ class NasNetMobile(ClassificationModel):
             # Shape is already 2D (batchSize x numClasses)
             self.logits = lastFC
 
+        # Useful utility function to train only the desired variables (and layers), here we don't have variables
+        # from the frozen graph, so it has no real effect
         self.setTrainableVariables(layersTrainedFromScratchNames)
         self.defineTrainingOperations()

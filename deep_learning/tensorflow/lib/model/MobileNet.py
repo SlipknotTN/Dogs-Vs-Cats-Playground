@@ -9,9 +9,9 @@ class MobileNet(ClassificationModel):
 
         ClassificationModel.__init__(self, configParams, model, dataProvider, trainDevice)
 
-        ## Tensorflow Placeholders
+        # Tensorflow Placeholders
         with tf.device(trainDevice):
-            # Image placeholder, shape NHWC, you need to provide BGR images
+            # Image placeholder, shape NHWC
             self.x = model.getGraph().get_tensor_by_name(configParams.inputName + ":0")
             # Ground truth placeholder (one-hot encoding)
             self.y = tf.placeholder(dtype=tf.int32, shape=[None, self.dataProvider.datasetMetadata.numClasses], name="y")
@@ -47,5 +47,7 @@ class MobileNet(ClassificationModel):
             # Reshape to 2D array (batchSize x numClasses), otherwise convolution output is 4D
             self.logits = tf.reshape(lastConv, [-1, self.dataProvider.datasetMetadata.numClasses])
 
+        # Useful utility function to train only the desired variables (and layers), here we don't have variables
+        # from the frozen graph, so it has no real effect
         self.setTrainableVariables(layersTrainedFromScratchNames)
         self.defineTrainingOperations()

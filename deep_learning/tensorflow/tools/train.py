@@ -17,7 +17,7 @@ def doParsing():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
         description='Tensorflow image classification fine tuning')
     parser.add_argument('--datasetDir', required=True, default=None, help='Dataset directory')
-    parser.add_argument('--baseModelDir', type=str, required=True, help='Base model folder')
+    parser.add_argument('--baseModelDir', type=str, required=False, help='Base model folder')
     parser.add_argument('--checkpointOutputDir', required=False, default="./export",
                         help='Output folder that will contains checkpoints')
     parser.add_argument('--modelOutputDir', required=False, default="./export",
@@ -46,8 +46,14 @@ def main():
         datasetMetadata=DatasetMetadata().initFromJson(os.path.join(args.datasetDir, "metadata.json")),
         configParams=configParams)
 
-    # Load base model graph
-    baseTFModel = TensorflowModel(os.path.join(args.baseModelDir, "graph.pb"))
+    # Load base model graph (fine tuning training)
+    baseTFModel = None
+    try:
+        baseTFModel = TensorflowModel(os.path.join(args.baseModelDir, "graph.pb"))
+    except Exception as e:
+        print("Warning: no base model provided or impossible to read,"
+              " this works only for custom model created from scratch")
+        baseTFModel = TensorflowModel()
 
     # Append classifier for fine tuning training
     trainingModel = ModelFactory.create(config=configParams, tfmodel=baseTFModel,
