@@ -61,6 +61,23 @@ Saved best epoch on validation accuracy.
 |-------|------------|-----------------|---------------|------------------|
 | SqueezeNet v1.1  | 227x227 | 30 epochs, LR Start from 0.001, ADAM optimizer | 0.9792 | 0.12585 |
 
+### Custom Model
+
+Started from a custom model trained from scratch, the architecture inspired by VGG.
+
+**Image format:** RGB.
+
+**Image preprocessing:** input image in range [0.0, 255.0] float, then subtract the imagenet mean image (VGG preprocessing).
+
+#### Kaggle Results
+
+Saved best epoch on validation accuracy.
+
+| Model | Input Size | HyperParameters | Validation accuracy | Kaggle LogLoss|
+|-------|------------|-----------------|---------------|------------------|
+| Custom  | 112x112 | 30 epochs, LR Start from 0.001, ADAM optimizer | 0.9160 | 0.48337 |
+
+
 
 ## Training instructions
 
@@ -144,6 +161,18 @@ python3 ./tools/train.py
 --tensorboardDir ./tensorboard/nasnet_mobile_ADAM/
 --modelOutputDir ./trainedModels/nasnet_mobile_ADAM
 --checkpointOutputDir ./trainedModels/nasnet_mobile_ADAM
+--useGpu 0
+```
+
+Custom model with ADAM optimizer
+
+```
+python3 ./tools/train.py
+--configFile ./config/custom_ADAM.cfg
+--datasetDir /home/michele/DNN/dogs_vs_cats_playground/kaggle_dataset/tfrec_112
+--tensorboardDir ./tensorboard/custom_ADAM/
+--modelOutputDir ./trainedModels/custom_ADAM
+--checkpointOutputDir ./trainedModels/custom_ADAM
 --useGpu 0
 ```
 
