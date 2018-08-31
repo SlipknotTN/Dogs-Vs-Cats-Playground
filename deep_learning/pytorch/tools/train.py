@@ -7,7 +7,7 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 from config.ConfigParams import ConfigParams
 from data.Preprocessing import Preprocessing
-from data.StdFileSystemDataset import StdFileSystemDataset
+from data.StandardDataset import StandardDataset
 from model.ModelsFactory import ModelsFactory
 
 
@@ -38,11 +38,12 @@ def main():
     preprocessing_transforms_val = preprocessing_transforms.get_transforms_val()
 
     # Read Dataset
-    dataset_train = StdFileSystemDataset(args.dataset_train_dir, preprocessing_transforms_train)
+    dataset_train = StandardDataset(args.dataset_train_dir, preprocessing_transforms_train)
     print("Train - Classes: {0}, Samples: {1}".format(str(len(dataset_train.get_classes())), str(len(dataset_train))))
-    dataset_val = StdFileSystemDataset(args.dataset_val_dir, preprocessing_transforms_val)
+    dataset_val = StandardDataset(args.dataset_val_dir, preprocessing_transforms_val)
     print("Validation - Classes: {0}, Samples: {1}".
           format(str(len(dataset_val.get_classes())), str(len(dataset_val))))
+    print("Classes " + str(dataset_train.get_classes()))
 
     # Load model and apply .train() and .cuda()
     model = ModelsFactory.create(config, len(dataset_train.get_classes()))

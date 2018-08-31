@@ -1,27 +1,25 @@
 import glob
 import os
 from torch.utils.data import Dataset
-import torchvision
 from PIL import Image
 
 
-class StdFileSystemDataset(Dataset):
-    """Dog Cat dataset, works with generic dataset where each subdirectory contain a class images"""
-
+class StandardDataset(Dataset):
+    """
+    Works with generic dataset where each subdirectory contain a class images
+    """
     def __init__(self, root_dir, transform):
         """
-        Args:
-            root_dir (string): Directory with classes subdirectories.
-            transform (callable, optional): Optional transform to be applied on a sample.
+        :param root_dir (string): Directory with classes subdirectories.
+        :param transform (callable, optional): Optional transform to be applied on a sample.
         """
         self.root_dir = root_dir
         self.transform = transform
 
         self.samples = []
 
-        # Read file system and save num classes, num of images, tuples (image path, gt)
-
-        self.classes = next(os.walk(self.root_dir))[1]
+        # Read file system and save num classes and tuples (image path, gt)
+        self.classes = sorted(next(os.walk(self.root_dir))[1])
 
         for class_index, class_name in enumerate(self.classes):
 
@@ -50,4 +48,4 @@ class StdFileSystemDataset(Dataset):
         # Transform image
         image = self.transform(image)
 
-        return {'image': image, 'gt': gt}
+        return {'image': image, 'gt': gt, 'file': image_path}
