@@ -208,7 +208,7 @@ python3 ./tools/testDirForExport.py
 ### [Optional] Load graph into tensorboard
 
 This script is useful to visualize the architecture, it works with pb files (frozen graph with weights or only graph definition).
-It is useful to see layer names, choice which layers retrains, see layers input sizes, etc...
+It is useful to see layer names, choose which layers retrains, see layers input sizes, etc...
 
 #### Load graph example
 
