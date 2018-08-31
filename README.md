@@ -17,7 +17,7 @@ My setup is a notebook with:
 
 ## Dataset
 
-TODO: How to download and prepare the dataset, each method can needs different processing (e.g. keras needs the trainval split).
+TODO: How to download and prepare the dataset and where to put, each frameworks needs custom processing described in relative sections.
 
 ## Implementantions roadmap
 

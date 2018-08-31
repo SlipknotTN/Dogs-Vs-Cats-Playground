@@ -23,7 +23,7 @@ Mobilenet pretrained on ImageNet, trained from scratch only the last convolution
 
 ### Custom model
 
-Example usage of Sequential API to define a new architectur and train it from scratch.
+Example usage of Sequential API to define a new architecture and train it from scratch.
 TODO: Improve the model and test on kaggle.
 
 ## Training instructions
@@ -52,7 +52,7 @@ After the script execution with these arguments you will get this subdirectories
 - trainval/train: symlinks to train subset images
 - trainval/val: symlinks to validation subset images (80/20 split)
 
-### Fine tuning training
+### Training
 
 With mobilenet pretrained model we create a new branch in the architecture for dogs vs cats classification task (adding only a new layer trained from scratch) and keeping old layers frozen.
 With custom model we train all the layers from scratch.

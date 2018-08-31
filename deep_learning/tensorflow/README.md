@@ -125,7 +125,7 @@ Output directory will contains:
 - val.tfrec: validation samples
 - metadata.json: metadata about dataset creation to reload data
 
-### Fine tuning training
+### Training
 
 We create a new branch in the architecture for dogs vs cats classification task (adding only a new layer trained from scratch) keeping old layers frozen, so we can start from the frozen graph.
 After final freeze graph of the trained model, we discard the 1000 classes specific branch.
