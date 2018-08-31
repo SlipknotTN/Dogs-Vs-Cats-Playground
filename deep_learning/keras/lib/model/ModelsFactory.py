@@ -9,7 +9,7 @@ class ModelsFactory(object):
         inputShape = (config.inputSize, config.inputSize, config.inputChannels)
 
         if config.architecture == "mobilenet":
-            # Fine tuning
+            # Transfer learning
             return Model.mobilenet(inputShape=inputShape, numClasses=numClasses, alpha=config.mobilenetAlpha,
                                    retrainAll=False)
 
