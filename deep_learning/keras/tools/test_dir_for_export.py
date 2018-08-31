@@ -27,7 +27,7 @@ def doParsing():
 
 def main():
     """
-    Script to export results for Kaggle, Images are read one by one
+    Script to export results for Kaggle, Images are read one by one, it considers only mobilenet model
     """
     args = doParsing()
     print(args)
