@@ -1,6 +1,8 @@
 import glob
 import os
 from torch.utils.data import Dataset
+import torchvision
+from PIL import Image
 
 
 class StdFileSystemDataset(Dataset):
@@ -28,29 +30,24 @@ class StdFileSystemDataset(Dataset):
                 self.samples.append((file, class_index))
 
     def get_classes(self):
+
         return self.classes
 
     def __len__(self):
+
         return len(self.samples)
 
     def __getitem__(self, idx):
 
-        raise NotImplementedError
+        sample = self.samples[idx]
 
-        # image_name = os.path.join(self.root_dir,
-        #                           self.key_pts_frame.iloc[idx, 0])
-        #
-        # image = mpimg.imread(image_name)
-        #
-        # # if image has an alpha color channel, get rid of it
-        # if (image.shape[2] == 4):
-        #     image = image[:, :, 0:3]
-        #
-        # key_pts = self.key_pts_frame.iloc[idx, 1:].as_matrix()
-        # key_pts = key_pts.astype('float').reshape(-1, 2)
-        # sample = {'image': image, 'keypoints': key_pts}
-        #
-        # if self.transform:
-        #     sample = self.transform(sample)
-        #
-        # return sample
+        image_path = sample[0]
+        gt = sample[1]
+
+        # Read as PIL image
+        image = Image.open(image_path)
+
+        # Transform image
+        image = self.transform(image)
+
+        return {'image': image, 'gt': gt}

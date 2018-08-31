@@ -30,4 +30,11 @@ class SqNet(nn.Module):
 
         features_base = self.base(x)
 
-        return self.classifier(features_base)
+        x = x.view(x.size(0), -1)
+
+        out = self.classifier(features_base)
+
+        # Resize batch_size x num_classes x 1 x 1 to batch_size x num_classes
+        out = out.view(out.size(0), -1)
+
+        return out
