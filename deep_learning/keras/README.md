@@ -110,7 +110,7 @@ Please notice that while the competition is over, you can still evaluate your mo
 
 #### Test examples
 
-Run script from *tensorflow* directory.
+Run script from *keras* directory.
 
 Mobilenet alpha 1.0 (full size):
 
@@ -132,4 +132,19 @@ python3 ./tools/test_dir_for_export.py
 
 ### [Optional] Run predictions on test directory with generator
 
-TODO
+Example of usage of a generator to run tests,
+there is no support to Kaggle CSV export in this example.
+
+First of all you need to prepare the dataset to use the keras utility.
+Test directory hasn't a known ground truth, but the flow_from_directory
+utility needs at least one class subdirectory, at least dummy.
+So create the directory ../../kaggle_dataset/keras_test and create a symlink
+to the directory ../../kaggle_dataset/test in ../../kaggle_dataset/keras_test/dummy.
+
+Mobilenet alpha 1.0 (full size):
+
+```
+python3 ./tools/test_dir_with_generator.py
+--datasetTestDir ../../kaggle_dataset/keras_test
+--modelPath ./export/mobilenet_full_fn.h5
+```
