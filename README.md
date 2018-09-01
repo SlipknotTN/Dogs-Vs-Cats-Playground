@@ -17,7 +17,34 @@ My setup is a notebook with:
 
 ## Dataset
 
-TODO: How to download and prepare the dataset and where to put, each frameworks needs custom processing described in relative sections.
+- Download the dataset from [Kaggle site](https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition/data)
+- Extract train and test directories in ./kaggle_dataset
+- Create dog and cat subdirectories in train directory and move all images in the correct subdirectories
+(image file names start with the class name)
+- Further processing of the dataset specific for the frameworks are described in the relative inner sections
+
+Kaggle dataset directory should look this:
+
+```
+kaggle_dataset
+│
+└───train
+│   │
+│   └───cat
+│   │    │   cat.0.jpg
+│   │    │   cat.1.jpg
+│   │    │   ...
+│   │
+│   └───dog
+│        │   dog.0.jpg
+│        │   dog.1.jpg
+│        │   ...
+│
+└───test
+    │   1.jpg
+    │   2.jpg
+    │   ...
+```
 
 ## Implementantions roadmap
 
@@ -29,4 +56,4 @@ Each subproject is standalone and you can refer to subsequent links:
     - [x] [Keras](/deep_learning/keras): pretrained MobileNet, custom model defined with Sequential API
     - [x] [Tensorflow](/deep_learning/tensorflow): pretrained MobileNet, pretrained SqueezeNet, pretrained NasNet, custom model
     - [x] [TuriCreate](/deep_learning/turicreate): pretrained SqueezeNet
-    - [ ] PyTorch
+    - [x] [PyTorch](/deep_learning/pytorch): pretrained SqueezeNet
