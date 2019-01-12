@@ -46,7 +46,7 @@ kaggle_dataset
     │   ...
 ```
 
-## Implementantions roadmap
+## Implementations roadmap
 
 Each subproject is standalone and you can refer to subsequent links:
 
