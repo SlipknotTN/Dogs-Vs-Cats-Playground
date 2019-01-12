@@ -1,5 +1,5 @@
 from .SqNet import SqNet
-#from .ResNet50 import ResNet50
+from .ResNet50 import ResNet50
 
 
 class ModelsFactory(object):
@@ -11,6 +11,11 @@ class ModelsFactory(object):
 
             # Transfer learning
             return SqNet(num_classes)
+
+        elif config.architecture == "resnet50":
+
+            # Transfer learning
+            return ResNet50(num_classes)
 
         else:
 

@@ -28,6 +28,7 @@ using mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225].
 | Model | Input Size | HyperParameters | Validation accuracy | Kaggle LogLoss|
 |-------|------------|-----------------|---------------|------------------|
 | SqueezeNet 1.1 | 224x224 | 20 epochs, LR 0.001, Momentum 0.9, SGD optimizer | 0.9602 | 0.15168 |
+| ResNet50 | 224x224 | 20 epochs, LR 0.001, Momentum 0.9, SGD optimizer | N/A | 0.15267 |
 
 ### Custom model
 
