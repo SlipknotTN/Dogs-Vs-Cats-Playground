@@ -30,6 +30,8 @@ def main():
 
     # Iterate over subclasses
     subdirs = next(os.walk(args.trainDatasetDir))[1]
+    if len(subdirs) == 0:
+        subdirs = [""]
     for directory in subdirs:
 
         if os.path.exists(os.path.join(args.outputDatasetDir, "train", directory)) is False:
@@ -38,7 +40,10 @@ def main():
         if os.path.exists(os.path.join(args.outputDatasetDir, "val", directory)) is False:
             os.makedirs(os.path.join(args.outputDatasetDir, "val", directory))
 
-        files = glob.glob(os.path.join(args.trainDatasetDir, directory) + "/*.jpg")
+        extensions = ["bmp", "png", "jpg"]
+        files = []
+        for extension in extensions:
+            files.extend(glob.glob(os.path.join(args.trainDatasetDir, directory) + "/*." + extension))
         trainFiles = files[:int(len(files) * (100 - args.valSplit) / 100)]
         valFiles = files[int(len(files) * (100 - args.valSplit) / 100):]
 

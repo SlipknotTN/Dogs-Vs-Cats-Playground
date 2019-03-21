@@ -15,19 +15,20 @@ Model pretrained on ImageNet provided by PyTorch, trained from scratch only the 
 **Image format:** RGB.
 
 **Image preprocessing during training:** shorter side resized to 256, extracted random crop of 224 x 224,
-PyTorch pretrained models preprocessing: images loaded in to a range of [0, 1] and then normalized
-using mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225].
+PyTorch pretrained models preprocessing: images loaded in to a range of \[0, 1\] and then normalized
+using mean = \[0.485, 0.456, 0.406\] and std = \[0.229, 0.224, 0.225\].
 You can explore other preprocessing steps
 
 **Image preprocessing during validation and test:** resized to 224 x 224,
-PyTorch pretrained models preprocessing: images loaded in to a range of [0, 1] and then normalized
-using mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225].
+PyTorch pretrained models preprocessing: images loaded in to a range of \[0, 1\] and then normalized
+using mean = \[0.485, 0.456, 0.406\] and std = \[0.229, 0.224, 0.225\].
 
 ### Kaggle Results
 
 | Model | Input Size | HyperParameters | Validation accuracy | Kaggle LogLoss|
 |-------|------------|-----------------|---------------|------------------|
 | SqueezeNet 1.1 | 224x224 | 20 epochs, LR 0.001, Momentum 0.9, SGD optimizer | 0.9602 | 0.15168 |
+| ResNet50 | 224x224 | 20 epochs, LR 0.001, Momentum 0.9, SGD optimizer | N/A | 0.15267 |
 
 ### Custom model
 
@@ -74,7 +75,7 @@ SqueezeNet 1.1:
 
 ```
 python3 ./tools/train.py
---dataset_train_dir ../,,/kaggle_dataset/trainval/train
+--dataset_train_dir ../../kaggle_dataset/trainval/train
 --dataset_val_dir ../../kaggle_dataset/trainval/val
 --config_file ./config/sqnet.cfg
 --model_output_path ./export/sqnet.pth

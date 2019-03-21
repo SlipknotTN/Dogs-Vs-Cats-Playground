@@ -56,4 +56,4 @@ Each subproject is standalone and you can refer to subsequent links:
     - [x] [Keras](/deep_learning/keras): pretrained MobileNet, custom model defined with Sequential API
     - [x] [Tensorflow](/deep_learning/tensorflow): pretrained MobileNet, pretrained SqueezeNet, pretrained NasNet, custom model
     - [x] [TuriCreate](/deep_learning/turicreate): pretrained SqueezeNet
-    - [x] [PyTorch](/deep_learning/pytorch): pretrained SqueezeNet
+    - [x] [PyTorch](/deep_learning/pytorch): pretrained SqueezeNet, pretrained ResNet50
