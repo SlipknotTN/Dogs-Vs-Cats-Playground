@@ -16,7 +16,7 @@ classes = ['cat', 'dog']
 
 def doParsing():
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-                                     description="Keras test script")
+                                     description="TensorFlow test script")
     parser.add_argument("--datasetTestDir", required=True, type=str, help="Dataset test directory")
     parser.add_argument("--configFile", required=True, type=str, help="Model config file")
     parser.add_argument("--modelPath", required=False, type=str, default="./export/graph.pb",
@@ -29,7 +29,7 @@ def doParsing():
 
 def main():
     """
-    Script to export results for Kaggle, Images are read one by one
+    Script to export results for Kaggle, Images are read one by one.
     """
     args = doParsing()
     print(args)
