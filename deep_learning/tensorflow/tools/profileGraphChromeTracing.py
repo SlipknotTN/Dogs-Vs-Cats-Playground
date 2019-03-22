@@ -76,8 +76,8 @@ def main():
                 fetched_timeline = timeline.Timeline(run_metadata.step_stats)
                 chrome_trace = fetched_timeline.generate_chrome_trace_format()
                 # Create chrome tracing which you can load with chrome://tracing inside Chrome browser
-                os.makedirs(os.path.join('./profiling/', config.architecture), exist_ok=True)
-                with open(os.path.join('profiling', config.architecture, 'timeline_step_%d.json' % ix), 'w') as f:
+                os.makedirs(os.path.join('profiling', 'chrome_tracing', config.architecture), exist_ok=True)
+                with open(os.path.join('profiling', 'chrome_tracing', config.architecture, 'timeline_step_%d.json' % ix), 'w') as f:
                     f.write(chrome_trace)
 
     print("Test finished")
